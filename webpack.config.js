@@ -65,8 +65,8 @@ module.exports = env => {
         { from: 'icons/*', to: '' },
         { from: 'src/img/*', to: 'img', flatten: true },
         { from: 'manifest.json', to: '' },
-        { from: 'src/options.html', to: '' },
-        { from: 'src/options.css', to: '' },
+        // { from: 'src/options.html', to: '' },
+        // { from: 'src/options.css', to: '' },
       ]),
     ].concat(isProd ? [new CleanWebpackPlugin()] : []),
 
