@@ -30,6 +30,7 @@
     }
   },
   "devDependencies": {
+    "@types/chrome": "0.0.88",
     "@types/mkdirp": "^0.5.2",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.4",
@@ -48,5 +49,7 @@
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   },
-  "dependencies": {}
+  "dependencies": {
+    "vanilla-type-check": "^2.0.3"
+  }
 }

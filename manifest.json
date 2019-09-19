@@ -18,5 +18,14 @@
     "default_icon": "icons/icon128.png",
     "default_title": "RHS+"
   },
-  "permissions": ["activeTab"],
+
+  "content_scripts": [
+    {
+      "js": ["rhsplus.js"],
+      "run_at": "document_end",
+      "matches": ["*://*.co.jp/cws31/cws*"]
+    }
+  ],
+
+  "permissions": ["storage"]
 }
