@@ -1,20 +1,20 @@
-import { updateState, getState } from '../utils/state';
 import { error } from '../utils/log';
+import { updateState, getState } from '../utils/state';
+import { getNextDayToFill, getDayInfo } from '../utils/state-queries';
 
 /**
  * From the list page, set the state action to auto-filling and
  * get the first day to fill, and start with it
  */
 export async function autoFillList() {
-  const state = await updateState({ action: 'autofill' });
+  const day = getNextDayToFill();
 
-  const day = state.days.find(day => day.state === 'pending');
-
-  if (!day || (!day.gateRecording && !day.isHoliday)) {
+  if (!day) {
     await updateState({ action: 'waiting' });
     return;
   }
 
+  await updateState({ action: 'autofill' });
   day.inputButton.click();
 }
 
@@ -22,8 +22,7 @@ export async function autoFillList() {
  * In the input page, insert the data and submit it
  */
 export async function autoFillInput() {
-  const state = getState();
-  if (state.action !== 'autofill') return;
+  if (getState().action !== 'autofill') return;
 
   const dayDate = document.querySelector<HTMLElement>('#HD > tbody > tr > td').innerText;
   const match = /(\d+)\/(\d+)\/(\d+)/.exec(dayDate);
@@ -32,9 +31,7 @@ export async function autoFillInput() {
   // tslint:disable-next-line: no-magic-numbers
   const day = Number(match[3]);
 
-  const data = state.days.find(
-    ({ date }) => date.day === day && date.month === month && date.year === year
-  );
+  const data = getDayInfo(year, month, day);
 
   if (!data) {
     error('Day not found');
@@ -81,6 +78,10 @@ export function autoFillConfirm() {
   button.click();
 }
 
+/**
+ *
+ */
 export async function stopAutoFill() {
+  if (getState().action !== 'autofill') return;
   await updateState({ action: 'waiting' });
 }

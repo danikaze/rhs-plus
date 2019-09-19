@@ -1,18 +1,19 @@
 import { MonthlyStats, State } from '../interfaces';
+import { getDaysByState } from '../utils/state-queries';
 
 export function getStats(state: State): MonthlyStats {
   return {
     average: getAverage(state),
-    summary: getSummary(state),
+    summary: getSummary(),
   };
 }
 
-function getSummary(state: State) {
+function getSummary() {
   return {
-    draft: state.days.filter(day => day.state === 'draft').length,
-    inputted: state.days.filter(day => day.state === 'inputted').length,
-    holiday: state.days.filter(day => day.state === 'holiday').length,
-    pending: state.days.filter(day => day.state === 'pending').length,
+    draft: getDaysByState('draft').length,
+    inputted: getDaysByState('inputted').length,
+    holiday: getDaysByState('holiday').length,
+    pending: getDaysByState('pending').length,
   };
 }
 

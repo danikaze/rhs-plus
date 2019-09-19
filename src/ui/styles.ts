@@ -29,6 +29,7 @@ export const classes = styleDefinitions({
   },
   buttonsContainer: {
     height: '20px',
+    minWidth: '230px',
   },
   buttonLink: {
     cursor: 'pointer',

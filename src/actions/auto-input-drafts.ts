@@ -1,8 +1,8 @@
 import { updateState } from '../utils/state';
+import { getDaysByState } from '../utils/state-queries';
 
 export async function autoInputDrafts() {
-  const state = await updateState({ action: 'autoinput' });
-  const drafted = state.days.filter(day => day.state === 'draft');
+  const drafted = getDaysByState('draft');
 
   if (drafted.length === 0) {
     await updateState({ action: 'waiting' });
@@ -13,6 +13,7 @@ export async function autoInputDrafts() {
     checkbox.checked = true;
   });
 
+  await updateState({ action: 'autoinput' });
   document.getElementById('DCMLTSBMT').click();
 }
 
