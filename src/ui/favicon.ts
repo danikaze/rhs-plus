@@ -1,3 +1,5 @@
+import { log } from '../utils/log';
+
 export function injectFavicon() {
   const link =
     document.querySelector<HTMLLinkElement>('link[rel*="icon"]') || document.createElement('link');

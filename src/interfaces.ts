@@ -1,6 +1,6 @@
 export type DayState = 'pending' | 'draft' | 'inputted' | 'holiday' | 'unknown';
-export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error';
-export type Action = 'waiting' | 'autofill';
+export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch';
+export type Action = 'waiting' | 'autofill' | 'autoinput';
 
 export interface DayInfo {
   inputButton: HTMLInputElement;

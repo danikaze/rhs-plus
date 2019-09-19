@@ -32,6 +32,5 @@ export const classes = styleDefinitions({
     cursor: 'pointer',
     color: 'blue',
     textDecoration: 'underline',
-    display: 'inline-block',
   },
 });

@@ -3,11 +3,13 @@ import { createElement } from '../utils/dom';
 import { classes } from './styles';
 import { getStats } from '../rhs/get-stats';
 import { autoFillList, stopAutoFill } from '../actions/auto-fill';
+import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
 
 interface Ui {
   container: HTMLDivElement;
   autoFillButton: HTMLDivElement;
+  inputDraftsButton: HTMLDivElement;
   stats: HTMLDivElement;
 }
 
@@ -34,6 +36,7 @@ export function updateUi(state: State) {
 
   updateUiElement(state, 'stats', createStats);
   updateUiElement(state, 'autoFillButton', createAutoFillButton);
+  updateUiElement(state, 'inputDraftsButton', createInputDraftsButtons);
 }
 
 /** Recreate a UI element */
@@ -69,6 +72,19 @@ function createAutoFillButton(state: State): HTMLDivElement {
     insertTo: ui.container,
     onClick: state.action === 'autofill' ? stopAutoFill : autoFillList,
     innerText: state.action === 'autofill' ? 'Stop Auto Fill' : 'Auto Fill',
+    style: classes.buttonLink,
+  });
+}
+
+function createInputDraftsButtons(state: State): HTMLDivElement {
+  const drafted = state.days.filter(day => day.state === 'draft');
+  if (drafted.length === 0) {
+    return;
+  }
+  return createElement('div', {
+    insertTo: ui.container,
+    onClick: autoInputDrafts,
+    innerText: 'Auto input drafts',
     style: classes.buttonLink,
   });
 }

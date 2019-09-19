@@ -4,6 +4,7 @@ import { injectFavicon } from './ui/favicon';
 import { initState, updateState } from './utils/state';
 import { getHoursPerDay } from './rhs/get-hours-per-day';
 import { autoFillInput, autoFillList, autoFillConfirm } from './actions/auto-fill';
+import { autoInputDraftsConfirm } from './actions/auto-input-drafts';
 
 window.onload = async () => {
   log('Extension loaded');
@@ -16,25 +17,27 @@ window.onload = async () => {
       injectUi(state);
       if (state.action === 'autofill') {
         autoFillList();
-        return;
       }
+      break;
 
+    case 'batch':
+      injectUi(state);
+      if (state.action === 'autoinput') {
+        autoInputDraftsConfirm();
+      }
       break;
 
     case 'input':
       injectUi(state);
       if (state.action === 'autofill') {
         autoFillInput();
-        return;
       }
-      autoFillInput();
       break;
 
     case 'confirm':
       injectUi(state);
       if (state.action === 'autofill') {
         autoFillConfirm();
-        return;
       }
       break;
 
