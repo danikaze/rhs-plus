@@ -7,7 +7,6 @@ const styleDefinitions: closedObject<Partial<CSSStyleDeclaration>> = e => e;
 export const classes = styleDefinitions({
   uiContainer: {
     position: 'fixed',
-    width: '200px',
     padding: '15px 5px 5px 5px',
     border: '1px solid grey',
     borderRadius: '5px',
@@ -28,9 +27,25 @@ export const classes = styleDefinitions({
   summaryPending: {
     color: '#a2a2a2',
   },
+  buttonsContainer: {
+    height: '20px',
+  },
   buttonLink: {
     cursor: 'pointer',
     color: 'blue',
     textDecoration: 'underline',
+  },
+  buttonLinkDisabled: {
+    color: 'grey',
+  },
+  autoFillContainer: {
+    position: 'absolute',
+    left: '5px',
+    bottom: '5px',
+  },
+  inputDraftContainer: {
+    position: 'absolute',
+    right: '5px',
+    bottom: '5px',
   },
 });

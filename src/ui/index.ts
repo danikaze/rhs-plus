@@ -8,8 +8,7 @@ import { State } from '../interfaces';
 
 interface Ui {
   container: HTMLDivElement;
-  autoFillButton: HTMLDivElement;
-  inputDraftsButton: HTMLDivElement;
+  buttons: HTMLDivElement;
   stats: HTMLDivElement;
 }
 
@@ -35,8 +34,7 @@ export function updateUi(state: State) {
   if (!ui.container) return;
 
   updateUiElement(state, 'stats', createStats);
-  updateUiElement(state, 'autoFillButton', createAutoFillButton);
-  updateUiElement(state, 'inputDraftsButton', createInputDraftsButtons);
+  updateUiElement(state, 'buttons', createButtons);
 }
 
 /** Recreate a UI element */
@@ -54,11 +52,16 @@ function createStats(state: State): HTMLDivElement {
   // tslint:disable-next-line: no-magic-numbers
   const avgM = String(Math.floor(average) % 60).padStart(2, '0');
   const html = `
-    <span style="color: #cccc99" title="Number of inputted days">${summary.inputted}</span> /
-    <span style="color: #d584e0" title="Number of holidays">${summary.holiday}</span> /
-    <span style="color: #49bd49" title="Number of drafted days">${summary.draft}</span> /
-    <span style="color: #a2a2a2" title="Number of pending days">${summary.pending}</span>
-    <span title="Average worked hours per day">(${avgH}:${avgM})</span>
+    <div>
+      <span style="color: #cccc99" title="Number of inputted days">${summary.inputted}</span> /
+      <span style="color: #d584e0" title="Number of holidays">${summary.holiday}</span> /
+      <span style="color: #49bd49" title="Number of drafted days">${summary.draft}</span> /
+      <span style="color: #a2a2a2" title="Number of pending days">${summary.pending}</span>
+    </div>
+    <div style="font-size: smaller">
+      Average worked hours per day:
+      <b>${avgH}:${avgM}</b>
+    </div>
   `;
 
   return createElement('div', {
@@ -67,24 +70,47 @@ function createStats(state: State): HTMLDivElement {
   });
 }
 
-function createAutoFillButton(state: State): HTMLDivElement {
-  return createElement('div', {
+function createButtons(state: State): HTMLDivElement {
+  const container = createElement('div', {
     insertTo: ui.container,
+    style: classes.buttonsContainer,
+  });
+
+  createAutoFillButton(state, container);
+  createInputDraftsButtons(state, container);
+
+  return container;
+}
+
+function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElement {
+  const container = createElement('div', {
+    insertTo: parent,
+    style: classes.autoFillContainer,
+  });
+
+  createElement('span', {
+    insertTo: container,
     onClick: state.action === 'autofill' ? stopAutoFill : autoFillList,
     innerText: state.action === 'autofill' ? 'Stop Auto Fill' : 'Auto Fill',
     style: classes.buttonLink,
   });
+
+  return container;
 }
 
-function createInputDraftsButtons(state: State): HTMLDivElement {
+function createInputDraftsButtons(state: State, parent: HTMLDivElement): HTMLDivElement {
   const drafted = state.days.filter(day => day.state === 'draft');
-  if (drafted.length === 0) {
-    return;
-  }
-  return createElement('div', {
-    insertTo: ui.container,
-    onClick: autoInputDrafts,
-    innerText: 'Auto input drafts',
-    style: classes.buttonLink,
+  const container = createElement('div', {
+    insertTo: parent,
+    style: classes.inputDraftContainer,
   });
+
+  createElement('span', {
+    insertTo: container,
+    onClick: drafted.length ? autoInputDrafts : undefined,
+    innerText: 'Auto input drafts',
+    style: drafted.length ? classes.buttonLink : classes.buttonLinkDisabled,
+  });
+
+  return container;
 }
