@@ -11,4 +11,10 @@ Provide extra information and automatic actions for _Works Applications_ based p
 
 ### 0.1.0
 
-- First release
+First release with:
+
+- Auto:
+  - draft day hours
+  - input drafted days
+- Improved info:
+  - Average worked hours per day
