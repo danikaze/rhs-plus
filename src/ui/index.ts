@@ -27,7 +27,7 @@ export function injectUi(state: State) {
     innerHTML: ``,
   });
 
-  updateUi(state);
+  updateUi(state, true);
 
   document.body.appendChild(ui.container);
 }
@@ -35,8 +35,9 @@ export function injectUi(state: State) {
 /**
  * Modify the UI based on the current state
  */
-export function updateUi(state: State) {
+export function updateUi(state: State, silence: boolean = false) {
   if (!ui.container) return;
+  if (!silence) log('Updating UI');
 
   updateUiElement(state, 'stats', createStats);
   updateUiElement(state, 'buttons', createButtons);

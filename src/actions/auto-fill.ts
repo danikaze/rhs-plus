@@ -1,4 +1,4 @@
-import { error } from '../utils/log';
+import { error, log } from '../utils/log';
 import { updateState, getState } from '../utils/state';
 import { getNextDayToFill, getDayInfo } from '../utils/state-queries';
 
@@ -10,10 +10,12 @@ export async function autoFillList() {
   const day = getNextDayToFill();
 
   if (!day) {
+    log('Nothing to autofill in the list. Stopping');
     await updateState({ action: 'waiting' });
     return;
   }
 
+  log('Autofilling day hours from the list');
   await updateState({ action: 'autofill' });
   day.inputButton.click();
 }
@@ -23,6 +25,7 @@ export async function autoFillList() {
  */
 export async function autoFillInput() {
   if (getState().action !== 'autofill') return;
+  log('Autofilling day hours');
 
   const dayDate = document.querySelector<HTMLElement>('#HD > tbody > tr > td').innerText;
   const match = /(\d+)\/(\d+)\/(\d+)/.exec(dayDate);
@@ -71,6 +74,8 @@ export function autoFillConfirm() {
   const state = getState();
   if (state.action !== 'autofill') return;
 
+  log('Confirming day hours');
+
   const button =
     INPUT_TYPE === 'draft'
       ? document.getElementById('dSave0')
@@ -83,5 +88,6 @@ export function autoFillConfirm() {
  */
 export async function stopAutoFill() {
   if (getState().action !== 'autofill') return;
+  log('Stopping autofill');
   await updateState({ action: 'waiting' });
 }

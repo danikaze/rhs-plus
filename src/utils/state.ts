@@ -10,6 +10,7 @@ export async function initState(): Promise<State> {
   if (!state) {
     state = await loadState();
     state.page = detectPage();
+    log(`Current page detected: ${state.page}`);
   }
 
   return state;
