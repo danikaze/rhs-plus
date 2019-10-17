@@ -89,7 +89,9 @@ function createButtons(state: State): HTMLDivElement {
   });
 
   createAutoFillButton(state, container);
-  createInputDraftsButtons(container);
+  if (state.page === 'list') {
+    createInputDraftsButtons(container);
+  }
 
   return container;
 }

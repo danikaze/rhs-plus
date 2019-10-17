@@ -4,7 +4,7 @@ import { getState } from '../utils/state';
 export function getNextDayToFill(): DayInfo {
   const day = getState().days.find(day => day.state === 'pending');
 
-  if (!day || (!day.gateRecording && !day.isHoliday)) {
+  if (!day || (!day.gateRecording && day.date.type !== 'holiday')) {
     return;
   }
 
