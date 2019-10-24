@@ -7,6 +7,7 @@ import {
   AutoFillAction,
 } from './utils/settings';
 import { createElement } from './utils/dom';
+import { clearState } from './utils/state';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 let lastSettings: Settings;
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-save').addEventListener('click', saveValues);
   document.getElementById('btn-restore').addEventListener('click', restoreValues);
   document.getElementById('btn-default').addEventListener('click', setDefaultValues);
+  document.getElementById('btn-reset').addEventListener('click', resetState);
 
   // populate tables
   lastSettings = await loadSettings();
@@ -139,6 +141,14 @@ async function setDefaultValues() {
   populateValues(defaultSettings);
   await saveSettings(defaultSettings);
   toast('Settings set as default values!');
+}
+
+/**
+ * Reset the state
+ */
+async function resetState() {
+  await clearState();
+  toast('State reset!');
 }
 
 function toast(text: string): void {

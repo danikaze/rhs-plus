@@ -29,6 +29,15 @@ export async function updateState(update?: Partial<State>): Promise<State> {
   return state;
 }
 
+export function clearState(): Promise<void> {
+  return new Promise(resolve => {
+    chrome.storage.local.clear(() => {
+      resolve();
+      log('State reset.');
+    });
+  });
+}
+
 async function loadState(): Promise<State> {
   return new Promise(resolve => {
     chrome.storage.local.get({ state: { updated: 0 } }, result => {
