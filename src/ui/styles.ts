@@ -28,8 +28,8 @@ export const classes = styleDefinitions({
     color: '#a2a2a2',
   },
   buttonsContainer: {
-    height: '20px',
     minWidth: '230px',
+    marginTop: '5px',
   },
   buttonLink: {
     cursor: 'pointer',
@@ -38,15 +38,5 @@ export const classes = styleDefinitions({
   },
   buttonLinkDisabled: {
     color: 'grey',
-  },
-  autoFillContainer: {
-    position: 'absolute',
-    left: '5px',
-    bottom: '5px',
-  },
-  inputDraftContainer: {
-    position: 'absolute',
-    right: '5px',
-    bottom: '5px',
   },
 });

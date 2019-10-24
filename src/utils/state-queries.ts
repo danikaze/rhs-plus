@@ -1,20 +1,49 @@
 import { DayInfo, DayState } from '../interfaces';
 import { getState } from '../utils/state';
 
-export function getNextDayToFill(): DayInfo {
-  const day = getState().days.find(day => day.state === 'pending');
-
-  if (!day || (!day.gateRecording && day.date.type !== 'holiday')) {
-    return;
-  }
-
-  return day;
+export function isAutoFilling(): boolean {
+  const state = getState();
+  return state.action === 'autofill' && state.days.filter(day => day.autoInput).length > 0;
 }
 
-export function getDayInfo(year: number, month: number, day: number): DayInfo {
-  return getState().days.find(
-    ({ date }) => date.day === day && date.month === month && date.year === year
+export function isAutoDraftInput(): boolean {
+  return getState().action === 'autoinput';
+}
+
+export function isWaiting(): boolean {
+  return getState().action === 'waiting';
+}
+
+export function getDaysToFill(): DayInfo[] {
+  return getState().days.filter(
+    day =>
+      (day.state === 'pending' || day.state === 'draft') &&
+      day.gateRecording &&
+      day.date.type !== 'holiday'
   );
+}
+
+export function getDayInfo(date: string): DayInfo;
+export function getDayInfo(year: number, month: number, day: number): DayInfo;
+export function getDayInfo(year: number | string, month?: number, day?: number): DayInfo {
+  // tslint:disable: no-magic-numbers
+  let y: number;
+  let m: number;
+  let d: number;
+
+  if (typeof year === 'string') {
+    const match = /(\d+)\/(\d+)\/(\d+)/.exec(year);
+    if (!match) return;
+    y = Number(match[1]);
+    m = Number(match[2]);
+    d = Number(match[3]);
+  } else {
+    y = year;
+    m = month;
+    d = day;
+  }
+
+  return getState().days.find(({ date }) => date.day === d && date.month === m && date.year === y);
 }
 
 export function getDaysByState(state: DayState): DayInfo[] {

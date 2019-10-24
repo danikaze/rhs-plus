@@ -1,6 +1,7 @@
 import { updateState, getState } from '../utils/state';
 import { getDaysByState } from '../utils/state-queries';
 import { log } from '../utils/log';
+import { resetStateAction } from './auto-fill';
 
 /**
  *
@@ -10,7 +11,7 @@ export async function autoInputDrafts() {
 
   if (drafted.length === 0) {
     log('No drafted days to input');
-    await updateState({ action: 'waiting' });
+    await resetStateAction();
     return;
   }
 
@@ -31,6 +32,6 @@ export async function autoInputDraftsConfirm() {
   if (getState().action !== 'autoinput') return;
 
   log('Confirming the bulk input');
-  await updateState({ action: 'waiting' });
+  await resetStateAction();
   document.getElementById('btnExec1').click();
 }

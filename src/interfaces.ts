@@ -1,5 +1,5 @@
 export type DayState = 'pending' | 'draft' | 'inputted' | 'holiday' | 'unknown';
-export type DayType = 'normal' | 'asakai' | 'holiday';
+export type DayType = 'regular' | 'asakai' | 'holiday';
 export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
 
@@ -24,6 +24,7 @@ export interface DayInfo {
   date: DateInfo;
   gateRecording?: InputHours;
   state: DayState;
+  autoInput?: boolean;
 }
 
 export interface State {
