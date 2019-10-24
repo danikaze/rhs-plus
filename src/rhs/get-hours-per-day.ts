@@ -49,7 +49,7 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
       year,
       month,
       day,
-      type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'normal',
+      type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'regular',
     },
     gateRecording: gateRecording && {
       entryH: Number(gateRecording[1]),

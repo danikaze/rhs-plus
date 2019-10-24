@@ -2,10 +2,10 @@ import { log } from '../utils/log';
 import { createElement } from '../utils/dom';
 import { classes } from './styles';
 import { getStats } from '../rhs/get-stats';
-import { autoFillList, stopAutoFill } from '../actions/auto-fill';
+import { autoFillList, resetStateAction } from '../actions/auto-fill';
 import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
-import { getDaysByState, getNextDayToFill } from '../utils/state-queries';
+import { getDaysByState, getDaysToFill, isAutoFilling } from '../utils/state-queries';
 
 interface Ui {
   container: HTMLDivElement;
@@ -100,19 +100,37 @@ function createButtons(state: State): HTMLDivElement {
  *
  */
 function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElement {
-  const dayToFill = getNextDayToFill();
-  const isActive = state.action === 'autofill';
+  const daysList = getDaysToFill();
+
   const container = createElement('div', {
     insertTo: parent,
-    style: classes.autoFillContainer,
   });
 
-  createElement('span', {
-    insertTo: container,
-    onClick: isActive ? stopAutoFill : dayToFill ? autoFillList : undefined,
-    innerText: isActive ? `Stop auto ${INPUT_TYPE}` : `Auto ${INPUT_TYPE} hours`,
-    style: !isActive && !dayToFill ? classes.buttonLinkDisabled : classes.buttonLink,
-  });
+  function startAutoFill() {
+    daysList.forEach(day => {
+      day.autoInput = true;
+    });
+    autoFillList();
+  }
+
+  // already auto-filling
+
+  if (isAutoFilling()) {
+    createElement('span', {
+      insertTo: container,
+      onClick: resetStateAction,
+      innerText: `Stop auto ${INPUT_TYPE}`,
+      style: classes.buttonLink,
+    });
+    // waiting to auto-fill (or nothing to autofill)
+  } else {
+    createElement('span', {
+      insertTo: container,
+      onClick: daysList.length > 0 ? startAutoFill : undefined,
+      innerText: `Auto ${INPUT_TYPE} hours`,
+      style: daysList.length > 0 ? classes.buttonLink : classes.buttonLinkDisabled,
+    });
+  }
 
   return container;
 }
@@ -124,7 +142,6 @@ function createInputDraftsButtons(parent: HTMLDivElement): HTMLDivElement {
   const drafted = getDaysByState('draft');
   const container = createElement('div', {
     insertTo: parent,
-    style: classes.inputDraftContainer,
   });
 
   createElement('span', {
