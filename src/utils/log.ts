@@ -1,5 +1,5 @@
 // tslint:disable: no-console
-const prefix = '[RHS]';
+const prefix = '[RHS+]';
 
 export function log(...args) {
   if (VERBOSE) console.info(prefix, ...args);
