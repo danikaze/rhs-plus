@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RHS+ Settings</title>
+    <link rel="stylesheet" href="assets/materialize.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="navbar-fixed">
+      <nav style="background: #bf0000">
+        <div class="nav-wrapper">
+          <span class="brand-logo" style="margin-left: 15px">
+            RHS+ Settings <span>(v<span id="app-version"></span>)</span>
+          </span>
+          <ul class="right">
+            <li>
+              <a
+                id="btn-save"
+                class="tooltipped btn waves-effect waves-light lime"
+                data-tooltip="Save current values as settings"
+              >
+                <span style="color: black">Save</span>
+              </a>
+            </li>
+            <li class="dynamic-color">
+              <a
+                id="btn-restore"
+                class="tooltipped btn waves-effect waves-light lime"
+                data-tooltip="Restore settings to the last saved values"
+              >
+                <span style="color: black">Restore</span>
+              </a>
+            </li>
+            <li>
+              <a
+                id="btn-default"
+                class="tooltipped btn waves-effect waves-light lime"
+                data-tooltip="Set values to the default settings and save them"
+              >
+                <span style="color: black">Default</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="section">
+        <h5>Common settings</h5>
+
+        <div class="row">
+          <div class="col s8 m4 l3 input-field">
+            <select id="autofill-action">
+              <option value="draft">Draft</option>
+              <option value="input">Input</option>
+            </select>
+            <label>Auto-fill action</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="settings-day-type">
+        <h5>Settings per day type</h5>
+
+        <table class="highlight">
+          <thead>
+            <tr>
+              <th rowspan="2">Day type</th>
+              <th colspan="2">Offset</th>
+              <th colspan="2">Clipping</th>
+            </tr>
+            <tr>
+              <th
+                class="tooltipped"
+                data-tooltip="Number of minutes to delay the start time from the gate recording entry time"
+              >
+                Entry time
+              </th>
+              <th
+                class="tooltipped"
+                data-tooltip="Number of minutes to stop working before the gate recording exit time"
+              >
+                Exit time
+              </th>
+              <th class="tooltipped" data-tooltip="Earliest time to input as start working time">
+                Entry time
+              </th>
+              <th class="tooltipped" data-tooltip="Latest time to input as end working time">
+                Exit time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="day-regular">
+              <th>Regular</th>
+              <td>
+                <input class="offset-start" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="offset-end" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="clip-start" type="time" />
+              </td>
+              <td>
+                <input class="clip-end" type="time" />
+              </td>
+            </tr>
+            <tr id="day-asakai">
+              <th>Asakai</th>
+              <td>
+                <input class="offset-start" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="offset-end" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="clip-start" type="time" />
+              </td>
+              <td>
+                <input class="clip-end" type="time" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section" id="settings-week-day">
+        <h5>Settings per week-day</h5>
+
+        <table class="highlight">
+          <thead>
+            <tr>
+              <th rowspan="2">Weekday</th>
+              <th colspan="2">Offset</th>
+              <th colspan="2">Clipping</th>
+            </tr>
+            <tr>
+              <th
+                class="tooltipped"
+                data-tooltip="Number of minutes to delay the start time from the gate recording entry time"
+              >
+                Entry time
+              </th>
+              <th
+                class="tooltipped"
+                data-tooltip="Number of minutes to stop working before the gate recording exit time"
+              >
+                Exit time
+              </th>
+              <th class="tooltipped" data-tooltip="Earliest time to input as start working time">
+                Entry time
+              </th>
+              <th class="tooltipped" data-tooltip="Latest time to input as end working time">
+                Exit time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="day-0">
+              <th>Sunday</th>
+              <td>
+                <input class="offset-start" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="offset-end" type="number" min="0" max="60" />
+              </td>
+              <td>
+                <input class="clip-start" type="time" />
+              </td>
+              <td>
+                <input class="clip-end" type="time" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section"></div>
+    </div>
+    <script src="assets/materialize.min.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

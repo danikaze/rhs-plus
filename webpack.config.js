@@ -16,6 +16,7 @@ module.exports = env => {
 
     entry: {
       rhsplus: ['src/index.ts'],
+      options: ['src/options.ts'],
     },
 
     output: {
@@ -63,10 +64,9 @@ module.exports = env => {
       }),
       new CopyPlugin([
         { from: 'icons/*', to: '' },
-        { from: 'src/img/*', to: 'img', flatten: true },
         { from: 'manifest.json', to: '' },
-        // { from: 'src/options.html', to: '' },
-        // { from: 'src/options.css', to: '' },
+        { from: 'src/options.html', to: '' },
+        { from: 'src/assets/*', to: 'assets', flatten: true },
       ]),
     ].concat(isProd ? [new CleanWebpackPlugin()] : []),
 

@@ -25,7 +25,14 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
   const month = Number(dateMatch[1]);
   const day = Number(dateMatch[2]);
   const isHoliday = dateText.indexOf('holiday') !== -1;
-  const isApplication = getChild(tr, 0).innerText.match(/holiday/i) !== null;
+  const isAsakai = (() => {
+    const cell = getChild(tr, 6);
+    const opt = cell.querySelector<HTMLOptionElement>('option[selected]');
+    if (opt) {
+      return opt.innerText.match(/asakai/i) !== null;
+    }
+    return cell.innerText.match(/asakai/i) !== null;
+  })();
   const inputButton = getChild(getChild(tr, 2), 0) as HTMLInputElement;
   const checkbox = getChild(tr, 0).querySelector('input');
   const gateRecording = /(\d+):(\d+)[^\d]*(\d+):(\d+)/.exec(getChild(tr, 9).innerText);
@@ -37,13 +44,12 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
     inputButton,
     checkbox,
     state,
-    isHoliday,
-    isApplication,
     worked,
     date: {
       year,
       month,
       day,
+      type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'normal',
     },
     gateRecording: gateRecording && {
       entryH: Number(gateRecording[1]),
