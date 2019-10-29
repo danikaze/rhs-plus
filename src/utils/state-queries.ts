@@ -3,7 +3,7 @@ import { getState } from '../utils/state';
 
 export function isAutoFilling(): boolean {
   const state = getState();
-  return state.action === 'autofill' && state.days.filter(day => day.autoInput).length > 0;
+  return state.action === 'autofill' && getDaysToFill().length > 0;
 }
 
 export function isAutoDraftInput(): boolean {
@@ -15,11 +15,15 @@ export function isWaiting(): boolean {
 }
 
 export function getDaysToFill(): DayInfo[] {
+  return getState().days.filter(day => day.autoInput);
+}
+
+export function getDraftableDays(): DayInfo[] {
   return getState().days.filter(
     day =>
-      (day.state === 'pending' || day.state === 'draft') &&
-      day.gateRecording &&
-      day.date.type !== 'holiday'
+      day.state !== 'inputted' &&
+      day.state !== 'confirmed' &&
+      (day.gateRecording || day.date.type === 'holiday')
   );
 }
 

@@ -5,7 +5,7 @@ import { getStats } from '../rhs/get-stats';
 import { autoFillList, resetStateAction } from '../actions/auto-fill';
 import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
-import { getDaysByState, getDaysToFill, isAutoFilling } from '../utils/state-queries';
+import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
 
 interface Ui {
   container: HTMLDivElement;
@@ -100,7 +100,7 @@ function createButtons(state: State): HTMLDivElement {
  *
  */
 function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElement {
-  const daysList = getDaysToFill();
+  const daysList = getDraftableDays();
 
   const container = createElement('div', {
     insertTo: parent,

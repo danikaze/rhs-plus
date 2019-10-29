@@ -2,9 +2,9 @@
 import { DayState, DayInfo } from '../interfaces';
 
 /**
- * Get all the available information from days
+ * Get all the available information for days from the list page
  */
-export function getHoursPerDay(): DayInfo[] {
+export function getHoursPerDay(currentInfo?: DayInfo[]): DayInfo[] {
   const dateElem = document.querySelector('.sp_kintai_kikan') as HTMLElement;
   const year = Number(/(\d+)\//.exec(dateElem.innerText)[1]);
 
@@ -13,7 +13,24 @@ export function getHoursPerDay(): DayInfo[] {
       !tr.children[0].classList.contains('mg_header') &&
       !tr.children[0].classList.contains('mg_sum')
   );
-  return tr.map(getDayRowInfo.bind(null, year));
+  const daysInfo = tr.map(getDayRowInfo.bind(null, year)) as DayInfo[];
+
+  if (currentInfo) {
+    currentInfo.forEach(day => {
+      const newDay = daysInfo.find(
+        newDay =>
+          newDay.date.day === day.date.day &&
+          newDay.date.month === day.date.month &&
+          newDay.date.year === day.date.year
+      );
+      // add existing info that can't be retrieved from the page (internal info set by this widget)
+      if (newDay) {
+        newDay.autoInput = day.autoInput;
+      }
+    });
+  }
+
+  return daysInfo;
 }
 
 /**
@@ -74,13 +91,10 @@ function getRowStatus(tr): DayState {
   const map: { [k: string]: DayState } = {
     mg_app_approved: 'holiday',
     mg_dc_saved: 'inputted',
+    mg_dc_confirmed: 'confirmed',
     mg_saved: 'draft',
     mg_normal: 'pending',
   };
   const statusClass = tr.children[4].className.toLowerCase();
-  const classes = Object.keys(map);
-
-  for (const c of classes) {
-    if (statusClass === c) return map[c];
-  }
+  return map[statusClass];
 }

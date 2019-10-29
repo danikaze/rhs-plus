@@ -18,6 +18,10 @@ function getSummary() {
 }
 
 function getAverage(state: State) {
+  if (!state || !state.days) {
+    return;
+  }
+
   let days = 0;
   let time = 0;
 

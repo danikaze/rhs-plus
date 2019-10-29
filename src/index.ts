@@ -15,11 +15,11 @@ import { isAutoFilling, isAutoDraftInput, isWaiting } from './utils/state-querie
 window.onload = async () => {
   log('Extension loaded');
   injectFavicon();
-  const state = await initState();
+  let state = await initState();
 
   switch (state.page) {
     case 'list':
-      updateState({ days: getHoursPerDay() });
+      state = await updateState({ days: getHoursPerDay(state.days) });
       injectUi(state);
       if (isAutoFilling()) {
         autoFillList();

@@ -1,4 +1,4 @@
-export type DayState = 'pending' | 'draft' | 'inputted' | 'holiday' | 'unknown';
+export type DayState = 'pending' | 'draft' | 'inputted' | 'confirmed' | 'holiday' | 'unknown';
 export type DayType = 'regular' | 'asakai' | 'holiday';
 export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
