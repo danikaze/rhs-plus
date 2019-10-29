@@ -1,5 +1,6 @@
 // tslint:disable: no-magic-numbers
 import { DayState, DayInfo } from '../interfaces';
+import { getChild } from '../utils/dom';
 
 /**
  * Get all the available information for days from the list page
@@ -75,13 +76,6 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
       exitM: Number(gateRecording[4]),
     },
   };
-}
-
-/**
- * Return a child of an HTMLElement as a HTMLElement
- */
-function getChild(elem: HTMLElement, n: number): HTMLElement {
-  return elem.children[n] as HTMLElement;
 }
 
 /**

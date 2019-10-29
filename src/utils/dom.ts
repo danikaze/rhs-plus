@@ -51,3 +51,10 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
   return elem;
 }
+
+/**
+ * Return a child of an HTMLElement as a HTMLElement
+ */
+export function getChild<T extends HTMLElement = HTMLElement>(elem: HTMLElement, n: number): T {
+  return elem.children[n] as T;
+}
