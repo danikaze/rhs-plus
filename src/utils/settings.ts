@@ -10,12 +10,14 @@ export interface WeekDaySettings {
 }
 
 export interface Settings {
+  version: string;
   autofillAction: AutoFillAction;
   dayType: { [type: string]: WeekDaySettings };
   weekDay: WeekDaySettings[];
 }
 
 export const defaultSettings: Settings = {
+  version: APP_VERSION,
   autofillAction: 'draft',
   dayType: {
     regular: { offsetStart: 0, offsetEnd: 0, clipStart: '09:00', clipEnd: undefined },
@@ -52,11 +54,22 @@ export async function loadSettings(): Promise<Settings> {
     chrome.storage.sync.get('settings', ({ settings }) => {
       if (settings) {
         log('Settings loaded', settings);
-        resolve(settings);
+        resolve(upgradeSettings(settings));
       } else {
         log('No settings found, using default ones');
         resolve(defaultSettings);
       }
     });
   });
+}
+
+/**
+ *
+ */
+function upgradeSettings(settings: Settings): Settings {
+  if (settings.version !== APP_VERSION) {
+    log(`Upgrading settings from ${settings.version} to ${APP_VERSION}`);
+  }
+
+  return settings;
 }
