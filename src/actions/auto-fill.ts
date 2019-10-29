@@ -33,7 +33,21 @@ export async function autoFillInput() {
   const data = getDayInfo(document.querySelector<HTMLElement>('#HD > tbody > tr > td').innerText);
   if (!data.autoInput) return;
 
-  log(`Autofilling day hours of ${data.date.year}-${data.date.month}-${data.date.day}`);
+  if (document.getElementsByClassName('error').length > 0) {
+    log(
+      `Error while autofilling hours for ${data.date.year}-${data.date.month}-${data.date.day} (${data.date.type}). Skipping`
+    );
+
+    data.autoInput = false;
+    await updateState();
+
+    (document.querySelector('[name="btnGoBack0"]') as HTMLElement).click();
+    return;
+  }
+
+  log(
+    `Autofilling day hours of ${data.date.year}-${data.date.month}-${data.date.day} (${data.date.type})`
+  );
 
   if (!data) {
     error('Day not found');
