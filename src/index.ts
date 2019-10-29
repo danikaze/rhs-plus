@@ -11,6 +11,8 @@ import {
 } from './actions/auto-fill';
 import { autoInputDraftsConfirm } from './actions/auto-input-drafts';
 import { isAutoFilling, isAutoDraftInput, isWaiting } from './utils/state-queries';
+import { hideColumns } from './ui/hide-columns';
+import { loadSettings } from './utils/settings';
 
 window.onload = async () => {
   log('Extension loaded');
@@ -20,6 +22,8 @@ window.onload = async () => {
   switch (state.page) {
     case 'list':
       state = await updateState({ days: getHoursPerDay(state.days) });
+      const settings = await loadSettings();
+      hideColumns(settings.columns);
       injectUi(state);
       if (isAutoFilling()) {
         autoFillList();

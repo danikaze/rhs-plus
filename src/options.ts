@@ -8,6 +8,8 @@ import {
 } from './utils/settings';
 import { createElement } from './utils/dom';
 import { clearState } from './utils/state';
+import { toCamelCase } from './utils/to-camel-case';
+import { toKebabCase } from './utils/to-kebab-case';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 let lastSettings: Settings;
@@ -41,6 +43,7 @@ function populateValues(settings: Settings): void {
   (document.getElementById('autofill-action') as HTMLInputElement).value = settings.autofillAction;
   populatePerDayTypeTable(settings);
   populatePerWeekTable(settings);
+  populateDisplayedColumns(settings);
   M.AutoInit();
 }
 
@@ -64,6 +67,18 @@ function populatePerWeekTable(settings: Settings) {
     const day = settings.weekDay[i];
     populateDayRow(tr, day);
   }
+}
+
+/**
+ * Fill the values of the displayed columns
+ */
+function populateDisplayedColumns(settings: Settings) {
+  Object.keys(settings.columns).forEach(name => {
+    if (settings.columns[name]) {
+      const input = document.getElementById(`column-${toKebabCase(name)}`) as HTMLInputElement;
+      input.checked = true;
+    }
+  });
 }
 
 /**
@@ -91,10 +106,30 @@ function readDayRow(tr: HTMLTableRowElement): WeekDaySettings {
  */
 async function saveValues() {
   const settings: Settings = {
+    version: APP_VERSION,
     autofillAction: (document.getElementById('autofill-action') as HTMLInputElement)
       .value as AutoFillAction,
     dayType: {},
     weekDay: [],
+    columns: {
+      date: false,
+      weekday: false,
+      inputButton: false,
+      actionButton: false,
+      status: false,
+      substituteButton: false,
+      attendanceClassification: false,
+      workingHours: false,
+      webRecording: false,
+      gateRecording: false,
+      totalWorkingHours: false,
+      lateNightOvertime: false,
+      holidayWork: false,
+      application: false,
+      trainDelay: false,
+      report: false,
+      excess: false,
+    },
   };
 
   // get values by day type
@@ -119,6 +154,13 @@ async function saveValues() {
     } catch (e) {
       return;
     }
+  });
+
+  // get visible headers
+  Array.from(document.querySelectorAll('[id^="column-"]')).forEach((input: HTMLInputElement) => {
+    const name = toCamelCase(input.id.replace(/^column-/, ''));
+    const value = input.checked;
+    settings.columns[name] = value;
   });
 
   lastSettings = settings;

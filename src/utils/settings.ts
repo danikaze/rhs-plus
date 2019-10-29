@@ -9,11 +9,32 @@ export interface WeekDaySettings {
   clipEnd: string; // latest time to input as end time
 }
 
+export interface ColumnsSettings {
+  date: boolean;
+  weekday: boolean;
+  inputButton: boolean;
+  actionButton: boolean;
+  status: boolean;
+  substituteButton: boolean;
+  attendanceClassification: boolean;
+  workingHours: boolean;
+  webRecording: boolean;
+  gateRecording: boolean;
+  totalWorkingHours: boolean;
+  lateNightOvertime: boolean;
+  holidayWork: boolean;
+  application: boolean;
+  trainDelay: boolean;
+  report: boolean;
+  excess: boolean;
+}
+
 export interface Settings {
   version: string;
   autofillAction: AutoFillAction;
   dayType: { [type: string]: WeekDaySettings };
   weekDay: WeekDaySettings[];
+  columns: ColumnsSettings;
 }
 
 export const defaultSettings: Settings = {
@@ -32,6 +53,25 @@ export const defaultSettings: Settings = {
     { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
     { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
   ],
+  columns: {
+    date: true,
+    weekday: true,
+    inputButton: true,
+    actionButton: true,
+    status: true,
+    substituteButton: true,
+    attendanceClassification: true,
+    workingHours: true,
+    webRecording: true,
+    gateRecording: true,
+    totalWorkingHours: true,
+    lateNightOvertime: true,
+    holidayWork: true,
+    application: true,
+    trainDelay: true,
+    report: true,
+    excess: true,
+  },
 };
 
 /**
@@ -69,6 +109,11 @@ export async function loadSettings(): Promise<Settings> {
 function upgradeSettings(settings: Settings): Settings {
   if (settings.version !== APP_VERSION) {
     log(`Upgrading settings from ${settings.version} to ${APP_VERSION}`);
+  }
+
+  // prior 2.3.0
+  if (!settings.columns) {
+    settings.columns = defaultSettings.columns;
   }
 
   return settings;
