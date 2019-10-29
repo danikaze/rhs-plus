@@ -120,10 +120,11 @@ function getDayInputHours(
   const weekDaySettings = settings.weekDay[dayDate.getDay()];
   const dayTypeSettings = settings.dayType[dateInfo.type];
 
-  let hours = clipStartTime(gateRecording, weekDaySettings.clipStart);
-  hours = clipEndTime(gateRecording, weekDaySettings.clipEnd);
-  hours = clipStartTime(gateRecording, dayTypeSettings && dayTypeSettings.clipStart);
-  hours = clipEndTime(gateRecording, dayTypeSettings && dayTypeSettings.clipEnd);
+  let hours = gateRecording;
+  hours = clipStartTime(hours, weekDaySettings.clipStart);
+  hours = clipEndTime(hours, weekDaySettings.clipEnd);
+  hours = clipStartTime(hours, dayTypeSettings && dayTypeSettings.clipStart);
+  hours = clipEndTime(hours, dayTypeSettings && dayTypeSettings.clipEnd);
 
   const entryTime = addMinutes(
     'entry',
@@ -176,7 +177,7 @@ function clipStartTime(gateRecording: InputHours, clipTime: string): InputHours 
     ...gateRecording,
     entryH: Math.max(gateRecording.entryH, minH),
     entryM:
-      gateRecording.entryH > minH ? gateRecording.entryM : Math.min(gateRecording.entryM, minM),
+      gateRecording.entryH > minH ? gateRecording.entryM : Math.max(gateRecording.entryM, minM),
   };
 }
 
