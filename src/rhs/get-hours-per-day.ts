@@ -1,5 +1,5 @@
 // tslint:disable: no-magic-numbers
-import { DayState, DayInfo } from '../interfaces';
+import { DayState, DayInfo, InputHours } from '../interfaces';
 import { getChild } from '../utils/dom';
 
 /**
@@ -53,7 +53,6 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
   })();
   const inputButton = getChild(getChild(tr, 2), 0) as HTMLInputElement;
   const checkbox = getChild(tr, 0).querySelector('input');
-  const gateRecording = /(\d+):(\d+)[^\d]*(\d+):(\d+)/.exec(getChild(tr, 9).innerText);
   const state = getRowStatus(tr);
   const workedTimeMatch = getChild(tr, 10).innerText.match(/(\d+):(\d+)/);
   const worked = workedTimeMatch ? Number(workedTimeMatch[1]) * 60 + Number(workedTimeMatch[2]) : 0;
@@ -69,12 +68,27 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
       day,
       type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'regular',
     },
-    gateRecording: gateRecording && {
-      entryH: Number(gateRecording[1]),
-      entryM: Number(gateRecording[2]),
-      exitH: Number(gateRecording[3]),
-      exitM: Number(gateRecording[4]),
-    },
+    gateRecording: getGateRecording(tr),
+  };
+}
+
+/**
+ * Get the day recording data for a day
+ */
+function getGateRecording(tr: HTMLTableRowElement): InputHours {
+  const text = getChild(tr, 9).innerText;
+  const hours = /(\d+):(\d+)[^\d]*(\d+):(\d+)/.exec(text);
+  if (!hours) return;
+  const entryDay = /Prev day.*--/i.test(text) ? -1 : /Next day.*--/i.test(text) ? 1 : 0;
+  const exitDay = /--.*Prev day/i.test(text) ? -1 : /--.*Next day/i.test(text) ? 1 : 0;
+
+  return {
+    entryDay,
+    exitDay,
+    entryH: Number(hours[1]),
+    entryM: Number(hours[2]),
+    exitH: Number(hours[3]),
+    exitM: Number(hours[4]),
   };
 }
 

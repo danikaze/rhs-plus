@@ -57,8 +57,14 @@ export async function autoFillInput() {
   if (data.gateRecording) {
     const settings = await loadSettings();
     const input = getDayInputHours(data.gateRecording, data.date, settings);
+    (document.getElementById('KNMTMRNGSTD') as HTMLSelectElement).value = String(
+      input.entryDay || 0
+    );
     (document.getElementById('KNMTMRNGSTH') as HTMLInputElement).value = String(input.entryH);
     (document.getElementById('KNMTMRNGSTM') as HTMLInputElement).value = String(input.entryM);
+    (document.getElementById('KNMTMRNGETD') as HTMLSelectElement).value = String(
+      input.exitDay || 0
+    );
     (document.getElementById('KNMTMRNGETH') as HTMLInputElement).value = String(input.exitH);
     (document.getElementById('KNMTMRNGETM') as HTMLInputElement).value = String(input.exitM);
 
@@ -138,6 +144,7 @@ function getDayInputHours(
   );
 
   return {
+    ...gateRecording,
     ...entryTime,
     ...exitTime,
   };

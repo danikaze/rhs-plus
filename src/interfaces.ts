@@ -2,12 +2,15 @@ export type DayState = 'pending' | 'draft' | 'inputted' | 'confirmed' | 'holiday
 export type DayType = 'regular' | 'asakai' | 'holiday';
 export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
+export type InputOffsetDay = -1 | 0 | 1;
 
 export interface InputHours {
   entryH: number;
   entryM: number;
+  entryDay?: InputOffsetDay;
   exitH: number;
   exitM: number;
+  exitDay?: InputOffsetDay;
 }
 
 export interface DateInfo {
