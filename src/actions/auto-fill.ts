@@ -33,9 +33,11 @@ export async function autoFillInput() {
   const data = getDayInfo(document.querySelector<HTMLElement>('#HD > tbody > tr > td').innerText);
   if (!data.autoInput) return;
 
-  if (document.getElementsByClassName('error').length > 0) {
-    log(
-      `Error while autofilling hours for ${data.date.year}-${data.date.month}-${data.date.day} (${data.date.type}). Skipping`
+  const errors = Array.from(document.getElementsByClassName('error')) as HTMLElement[];
+  if (errors.length > 0) {
+    const errorDetails = errors.map(error => `- ${error.innerText}`).join('\n');
+    error(
+      `Error while autofilling hours for ${data.date.year}-${data.date.month}-${data.date.day} (${data.date.type}). Skipping\n${errorDetails}`
     );
 
     data.autoInput = false;

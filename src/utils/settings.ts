@@ -41,8 +41,8 @@ export const defaultSettings: Settings = {
   version: APP_VERSION,
   autofillAction: 'draft',
   dayType: {
-    regular: { offsetStart: 0, offsetEnd: 0, clipStart: '09:00', clipEnd: undefined },
-    asakai: { offsetStart: 0, offsetEnd: 0, clipStart: '08:00', clipEnd: undefined },
+    regular: { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
+    asakai: { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
   },
   weekDay: [
     { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },

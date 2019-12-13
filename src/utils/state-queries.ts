@@ -1,4 +1,4 @@
-import { DayInfo, DayState } from '../interfaces';
+import { DayInfo, DayState, DateInfo } from '../interfaces';
 import { getState } from '../utils/state';
 
 export function isAutoFilling(): boolean {
@@ -19,8 +19,18 @@ export function getDaysToFill(): DayInfo[] {
 }
 
 export function getDraftableDays(): DayInfo[] {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+
+  function isBeforeToday(date: DateInfo): boolean {
+    return date.year <= year && date.month <= month && date.day < day;
+  }
+
   return getState().days.filter(
     day =>
+      isBeforeToday(day.date) &&
       day.state !== 'inputted' &&
       day.state !== 'confirmed' &&
       (day.gateRecording || day.date.type === 'holiday')
