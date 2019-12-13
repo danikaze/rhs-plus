@@ -16,7 +16,8 @@ Provide extra information and automatic actions for RHS pages
 
 ### 0.4.0
 
-- Handle the case where the entry adn the exit day are not the same
+- Handle the case where the entry and the exit day are not the same
+- Clipping time is disabled by default. Can be enabled again in the options page
 
 ### 0.3.0
 
