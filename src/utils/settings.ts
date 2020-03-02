@@ -91,10 +91,10 @@ export async function saveSettings(settings: Settings): Promise<void> {
  */
 export async function loadSettings(): Promise<Settings> {
   return new Promise(resolve => {
-    chrome.storage.sync.get('settings', ({ settings }) => {
+    chrome.storage.sync.get('settings', async ({ settings }) => {
       if (settings) {
         log('Settings loaded', settings);
-        resolve(upgradeSettings(settings));
+        resolve(await upgradeSettings(settings));
       } else {
         log('No settings found, using default ones');
         resolve(defaultSettings);
@@ -106,15 +106,20 @@ export async function loadSettings(): Promise<Settings> {
 /**
  *
  */
-function upgradeSettings(settings: Settings): Settings {
-  if (settings.version !== APP_VERSION) {
-    log(`Upgrading settings from ${settings.version} to ${APP_VERSION}`);
+async function upgradeSettings(settings: Settings): Promise<Settings> {
+  if (settings.version === APP_VERSION) {
+    return settings;
   }
+  log(`Upgrading settings from ${settings.version} to ${APP_VERSION}`);
 
   // prior 2.3.0
   if (!settings.columns) {
     settings.columns = defaultSettings.columns;
   }
+
+  // store update settings
+  settings.version = APP_VERSION;
+  await saveSettings(settings);
 
   return settings;
 }
