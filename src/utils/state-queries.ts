@@ -25,7 +25,11 @@ export function getDraftableDays(): DayInfo[] {
   const day = now.getDate();
 
   function isBeforeToday(date: DateInfo): boolean {
-    return date.year <= year && date.month <= month && date.day < day;
+    return (
+      date.year < year ||
+      (date.year <= year && date.month < month) ||
+      (date.year <= year && date.month <= month && date.day < day)
+    );
   }
 
   return getState().days.filter(
