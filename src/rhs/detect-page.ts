@@ -4,6 +4,10 @@ import { Page } from '../interfaces';
  * Detect the current page
  */
 export function detectPage(): Page {
+  const sn = document.querySelector<HTMLInputElement>('[name="@SN"]');
+  if (sn && sn.value === 'root.cws.wage.wagedetail') return 'wagedetail';
+  if (sn && sn.value === 'root.cws.wage.bonusdetail') return 'bonusdetail';
+
   const table = document.getElementById('APPROVALGRD');
   if (table) {
     const cb = table.querySelector('input[type="checkbox"]') as HTMLInputElement;

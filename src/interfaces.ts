@@ -1,6 +1,14 @@
 export type DayState = 'pending' | 'draft' | 'inputted' | 'confirmed' | 'holiday' | 'unknown';
 export type DayType = 'regular' | 'asakai' | 'holiday';
-export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch';
+export type Page =
+  | 'list'
+  | 'input'
+  | 'confirm'
+  | 'logout'
+  | 'error'
+  | 'batch'
+  | 'wagedetail'
+  | 'bonusdetail';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
 export type InputOffsetDay = -1 | 0 | 1;
 
