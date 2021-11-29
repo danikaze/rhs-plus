@@ -14,6 +14,10 @@ Provide extra information and automatic actions for RHS pages
 - Set rules to input hours/ignore days based on criteria (_i.e. don't register work hours if the working time is less than 3 hours in a weekend_)
 - Add anotations in the list page to be applied by the auto filler (_i.e. comments to be input in a day, etc._)
 
+### 0.5.1
+
+- Support new column in RHS: `Data of accumulated holidays` with a colspan of 3
+
 ### 0.5.0
 
 - Translate the wage details and bonus details pages from Japanese to English
