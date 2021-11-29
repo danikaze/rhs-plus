@@ -12,17 +12,19 @@ import {
 import { autoInputDraftsConfirm } from './actions/auto-input-drafts';
 import { isAutoFilling, isAutoDraftInput, isWaiting } from './utils/state-queries';
 import { hideColumns } from './ui/hide-columns';
-import { loadSettings } from './utils/settings';
+import { loadSettings, Settings } from './utils/settings';
+import { translateWages } from './actions/translate-wages';
 
 window.onload = async () => {
   log('Extension loaded');
   injectFavicon();
   let state = await initState();
+  let settings: Settings;
 
   switch (state.page) {
     case 'list':
       state = await updateState({ days: getHoursPerDay(state.days) });
-      const settings = await loadSettings();
+      settings = await loadSettings();
       hideColumns(settings.columns);
       injectUi(state);
       if (isAutoFilling()) {
@@ -55,6 +57,14 @@ window.onload = async () => {
       if (!isWaiting()) {
         resetStateAction();
         (document.querySelector('#maincontentsbody > form > a') as HTMLElement).click();
+      }
+      break;
+
+    case 'wagedetail':
+    case 'bonusdetail':
+      settings = await loadSettings();
+      if (settings.translate) {
+        translateWages();
       }
       break;
   }

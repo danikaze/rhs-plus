@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function populateValues(settings: Settings): void {
+  (document.getElementById('translate') as HTMLInputElement).checked = settings.translate;
   (document.getElementById('autofill-action') as HTMLInputElement).value = settings.autofillAction;
   populatePerDayTypeTable(settings);
   populatePerWeekTable(settings);
@@ -107,6 +108,7 @@ function readDayRow(tr: HTMLTableRowElement): WeekDaySettings {
 async function saveValues() {
   const settings: Settings = {
     version: APP_VERSION,
+    translate: (document.getElementById('translate') as HTMLInputElement).checked,
     autofillAction: (document.getElementById('autofill-action') as HTMLInputElement)
       .value as AutoFillAction,
     dayType: {},
@@ -131,6 +133,8 @@ async function saveValues() {
       excess: false,
     },
   };
+
+  //
 
   // get values by day type
   let rows = Array.from(document.querySelectorAll('#settings-day-type tbody tr'));
