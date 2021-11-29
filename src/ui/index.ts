@@ -60,6 +60,7 @@ function createStats(state: State): HTMLDivElement {
   const avgH = String(Math.floor(average / 60)).padStart(2, '0');
   // tslint:disable-next-line: no-magic-numbers
   const avgM = String(Math.floor(average) % 60).padStart(2, '0');
+  const avgTime = avgH === 'NaN' || avgM === 'NaN' ? 'N/A' : `${avgH}:${avgM}`;
   const html = `
     <div>
       <span style="color: #cccc99" title="Number of inputted days">${summary.inputted}</span> /
@@ -69,7 +70,7 @@ function createStats(state: State): HTMLDivElement {
     </div>
     <div style="font-size: smaller">
       Average worked hours per day:
-      <b>${avgH}:${avgM}</b>
+      <b>${avgTime}</b>
     </div>
   `;
 

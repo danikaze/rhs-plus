@@ -20,6 +20,7 @@ export interface ColumnsSettings {
   workingHours: boolean;
   webRecording: boolean;
   gateRecording: boolean;
+  accumulatedHolidaysData: boolean;
   totalWorkingHours: boolean;
   lateNightOvertime: boolean;
   holidayWork: boolean;
@@ -66,6 +67,7 @@ export const defaultSettings: Settings = {
     workingHours: true,
     webRecording: true,
     gateRecording: true,
+    accumulatedHolidaysData: true,
     totalWorkingHours: true,
     lateNightOvertime: true,
     holidayWork: true,

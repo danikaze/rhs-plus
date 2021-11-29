@@ -1,6 +1,6 @@
 // tslint:disable: no-magic-numbers
 import { DayState, DayInfo, InputHours } from '../interfaces';
-import { getChild } from '../utils/dom';
+import { rhsTable } from '../ui/columns';
 
 /**
  * Get all the available information for days from the list page
@@ -37,24 +37,25 @@ export function getHoursPerDay(currentInfo?: DayInfo[]): DayInfo[] {
 /**
  * Get information from one row
  */
-function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
-  const dateText = getChild(tr, 0).innerText.toLowerCase();
+function getDayRowInfo(year: number, tr: HTMLTableRowElement, rowIndex: number): DayInfo {
+  const row = rhsTable.getDataRow(rowIndex);
+  const dateText = row.getCell('date')!.innerText.toLowerCase();
   const dateMatch = dateText.match(/(\d+)\/(\d+)/);
   const month = Number(dateMatch[1]);
   const day = Number(dateMatch[2]);
   const isHoliday = dateText.indexOf('holiday') !== -1;
   const isAsakai = (() => {
-    const cell = getChild(tr, 6);
+    const cell = row.getCell('attendanceClassification');
     const opt = cell.querySelector<HTMLOptionElement>('option[selected]');
     if (opt) {
       return opt.innerText.match(/asakai/i) !== null;
     }
     return cell.innerText.match(/asakai/i) !== null;
   })();
-  const inputButton = getChild(getChild(tr, 2), 0) as HTMLInputElement;
-  const checkbox = getChild(tr, 0).querySelector('input');
+  const inputButton = row.getCell('inputButton').querySelector('input');
+  const checkbox = row.getCell('date').querySelector('input');
   const state = getRowStatus(tr);
-  const workedTimeMatch = getChild(tr, 10).innerText.match(/(\d+):(\d+)/);
+  const workedTimeMatch = row.getCell('totalWorkingHours').innerText.match(/(\d+):(\d+)/);
   const worked = workedTimeMatch ? Number(workedTimeMatch[1]) * 60 + Number(workedTimeMatch[2]) : 0;
 
   return {
@@ -68,15 +69,15 @@ function getDayRowInfo(year: number, tr: HTMLTableRowElement): DayInfo {
       day,
       type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'regular',
     },
-    gateRecording: getGateRecording(tr),
+    gateRecording: getGateRecording(row.getCell('gateRecording')),
   };
 }
 
 /**
  * Get the day recording data for a day
  */
-function getGateRecording(tr: HTMLTableRowElement): InputHours {
-  const text = getChild(tr, 9).innerText;
+function getGateRecording(cell: HTMLTableCellElement): InputHours {
+  const text = cell.innerText;
   const hours = /(\d+):(\d+)[^\d]*(\d+):(\d+)/.exec(text);
   if (!hours) return;
   const entryDay = /Prev day.*--/i.test(text) ? -1 : /Next day.*--/i.test(text) ? 1 : 0;

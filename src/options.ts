@@ -124,6 +124,7 @@ async function saveValues() {
       workingHours: false,
       webRecording: false,
       gateRecording: false,
+      accumulatedHolidaysData: false,
       totalWorkingHours: false,
       lateNightOvertime: false,
       holidayWork: false,
