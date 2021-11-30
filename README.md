@@ -17,6 +17,7 @@ Provide extra information and automatic actions for RHS pages
 ### Next
 
 - Delay the RhsTable initialization until needed to avoid accessing unexisting tables
+- Button to toggle the UI panel in the attendance page
 
 ### 0.5.1
 
