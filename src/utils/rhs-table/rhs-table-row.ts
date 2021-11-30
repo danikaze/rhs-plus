@@ -1,6 +1,6 @@
 import { DayState, DateInfo, InputHours } from '../../interfaces';
 import { ColumnsSettings } from '../settings';
-import { COLUMN_NAMES } from './constants';
+import { COLUMN_IDS } from './constants';
 
 export class RhsTableRow {
   private static readonly CLASS_STATE_MAP: { [k: string]: DayState } = {
@@ -19,7 +19,7 @@ export class RhsTableRow {
   public getCell(column: keyof ColumnsSettings, sub: number = 0): HTMLTableCellElement | undefined {
     let index = 0;
     for (let i = 0; i <= sub; i++) {
-      index = COLUMN_NAMES.indexOf(column, index);
+      index = COLUMN_IDS.indexOf(column, index);
       if (index === -1) return;
     }
 
