@@ -1,6 +1,6 @@
 // tslint:disable: no-magic-numbers
-import { DayState, DayInfo, InputHours } from '../interfaces';
-import { getRhsTable } from '../ui/columns';
+import { DayInfo } from '../interfaces';
+import { getRhsTable } from '../utils/rhs-table';
 
 /**
  * Get all the available information for days from the list page
@@ -10,16 +10,16 @@ export function getHoursPerDay(currentInfo?: DayInfo[]): DayInfo[] {
   const year = Number(/(\d+)\//.exec(dateElem.innerText)[1]);
 
   const tr = Array.from(document.querySelectorAll('#APPROVALGRD tr')).filter(
-    tr =>
+    (tr) =>
       !tr.children[0].classList.contains('mg_header') &&
       !tr.children[0].classList.contains('mg_sum')
   );
   const daysInfo = tr.map(getDayRowInfo.bind(null, year)) as DayInfo[];
 
   if (currentInfo) {
-    currentInfo.forEach(day => {
+    currentInfo.forEach((day) => {
       const newDay = daysInfo.find(
-        newDay =>
+        (newDay) =>
           newDay.date.day === day.date.day &&
           newDay.date.month === day.date.month &&
           newDay.date.year === day.date.year
@@ -39,71 +39,20 @@ export function getHoursPerDay(currentInfo?: DayInfo[]): DayInfo[] {
  */
 function getDayRowInfo(year: number, tr: HTMLTableRowElement, rowIndex: number): DayInfo {
   const row = getRhsTable().getDataRow(rowIndex);
-  const dateText = row.getCell('date')!.innerText.toLowerCase();
-  const dateMatch = dateText.match(/(\d+)\/(\d+)/);
-  const month = Number(dateMatch[1]);
-  const day = Number(dateMatch[2]);
-  const isHoliday = dateText.indexOf('holiday') !== -1;
-  const isAsakai = (() => {
-    const cell = row.getCell('attendanceClassification');
-    const opt = cell.querySelector<HTMLOptionElement>('option[selected]');
-    if (opt) {
-      return opt.innerText.match(/asakai/i) !== null;
-    }
-    return cell.innerText.match(/asakai/i) !== null;
-  })();
-  const inputButton = row.getCell('inputButton').querySelector('input');
-  const checkbox = row.getCell('date').querySelector('input');
-  const state = getRowStatus(tr);
-  const workedTimeMatch = row.getCell('totalWorkingHours').innerText.match(/(\d+):(\d+)/);
-  const worked = workedTimeMatch ? Number(workedTimeMatch[1]) * 60 + Number(workedTimeMatch[2]) : 0;
+
+  const date = row.getDate(year);
+  const inputButton = row.getInputButton();
+  const checkbox = row.getCheckbox();
+  const state = row.getState();
+  const worked = row.getWorkedMinutes();
+  const gateRecording = row.getGateRecording();
 
   return {
     inputButton,
     checkbox,
     state,
     worked,
-    date: {
-      year,
-      month,
-      day,
-      type: isHoliday ? 'holiday' : isAsakai ? 'asakai' : 'regular',
-    },
-    gateRecording: getGateRecording(row.getCell('gateRecording')),
+    date,
+    gateRecording,
   };
-}
-
-/**
- * Get the day recording data for a day
- */
-function getGateRecording(cell: HTMLTableCellElement): InputHours {
-  const text = cell.innerText;
-  const hours = /(\d+):(\d+)[^\d]*(\d+):(\d+)/.exec(text);
-  if (!hours) return;
-  const entryDay = /Prev day.*--/i.test(text) ? -1 : /Next day.*--/i.test(text) ? 1 : 0;
-  const exitDay = /--.*Prev day/i.test(text) ? -1 : /--.*Next day/i.test(text) ? 1 : 0;
-
-  return {
-    entryDay,
-    exitDay,
-    entryH: Number(hours[1]),
-    entryM: Number(hours[2]),
-    exitH: Number(hours[3]),
-    exitM: Number(hours[4]),
-  };
-}
-
-/**
- * Get the status of a day application
- */
-function getRowStatus(tr): DayState {
-  const map: { [k: string]: DayState } = {
-    mg_app_approved: 'holiday',
-    mg_dc_saved: 'inputted',
-    mg_dc_confirmed: 'confirmed',
-    mg_saved: 'draft',
-    mg_normal: 'pending',
-  };
-  const statusClass = tr.children[4].className.toLowerCase();
-  return map[statusClass];
 }
