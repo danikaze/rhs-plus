@@ -82,7 +82,7 @@ export const defaultSettings: Settings = {
  *
  */
 export async function saveSettings(settings: Settings): Promise<void> {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     chrome.storage.sync.set({ settings }, () => {
       resolve();
       log('Settings stored', settings);
@@ -94,7 +94,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
  *
  */
 export async function loadSettings(): Promise<Settings> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     chrome.storage.sync.get('settings', async ({ settings }) => {
       if (settings) {
         log('Settings loaded', settings);

@@ -1,7 +1,8 @@
 ---
 linterOptions:
   exclude:
-    - package.json
+    - app
+    - build
 
 rulesDirectory:
   - ./node_modules/tslint-consistent-codestyle/rules
@@ -14,17 +15,14 @@ rules:
   max-line-length:
     - true
     - limit: 120
-      ignore-pattern: 'http|^import |new RegExp| = \/'
+      ignore-pattern: '(^import )|(new RegExp)|(^\s*it\()|( = \/|https?:\/\/)|(^ \* \|)'
+      # last pattern is for comments with markdown tables
 
   # https://palantir.github.io/tslint/rules/file-name-casing/
   file-name-casing:
     - true
     - kebab-case
-
-  # https://palantir.github.io/tslint/rules/no-default-export/
-  # reasoning: https://basarat.gitbooks.io/typescript/docs/tips/defaultIsBad.html
-  # google also doing that: https://github.com/google/ts-style/blob/master/tslint.json
-  no-default-export: true
+    - snake-case
 
   # https://palantir.github.io/tslint/rules/triple-equals/
   triple-equals: true
@@ -107,14 +105,8 @@ rules:
   # from https://github.com/google/ts-style
   ban:
     - true
-    - name: parseInt
-      message: tsstyle#type-coercion
-    - name: parseFloat
-      message: tsstyle#type-coercion
     - name: Array
-      message: tsstyle#array-constructor
-    - name: expect
-      message: "Use 'assert' instead."
+      message": tsstyle#array-constructor
 
   # https://palantir.github.io/tslint/rules/ban-types/
   # from https://github.com/google/ts-style
@@ -170,6 +162,7 @@ rules:
   quotemark:
     - true
     - single
+    - jsx-double
 
   # https://palantir.github.io/tslint/rules/no-eval/
   no-eval: true
@@ -190,14 +183,12 @@ rules:
     - -1
     - 1
     - 2
+    - 100
     - 1000
 
   # https://github.com/buzinas/tslint-eslint-rules/blob/master/src/docs/rules/terIndentRule.md
   # builtin in tslint not really working :( https://github.com/palantir/tslint/issues/2814
-  ter-indent:
-    - true
-    - 2
-    - SwitchCase: 1
+  ter-indent: false
 
   # https://palantir.github.io/tslint/rules/whitespace/
   whitespace:
@@ -216,6 +207,11 @@ rules:
 
   # https://github.com/ajafff/tslint-consistent-codestyle/blob/master/docs/object-shorthand-properties-first.md
   object-shorthand-properties-first: true
+
+  # https://github.com/ajafff/tslint-consistent-codestyle/blob/master/docs/early-exit.md
+  early-exit:
+    - true
+    - max-length: 4
 
   # https://github.com/ajafff/tslint-consistent-codestyle/blob/master/docs/no-collapsible-if.md
   no-collapsible-if: true
@@ -291,7 +287,6 @@ rules:
   # https://palantir.github.io/tslint/rules/arrow-parens/
   arrow-parens:
     - true
-    - ban-single-arg-parens
 
   # https://palantir.github.io/tslint/rules/no-duplicate-imports/
   no-duplicate-imports: true
@@ -358,6 +353,7 @@ rules:
   semicolon:
     - true
     - always
+    - strict-bound-class-methods
 
   # https://palantir.github.io/tslint/rules/no-construct/
   no-construct: true
@@ -366,14 +362,15 @@ rules:
   radix: true
 
   # https://palantir.github.io/tslint/rules/no-this-assignment/
-  no-this-assignment: true
+  no-this-assignment:
+    - true
+    - allow-destructuring: true
 
   # https://palantir.github.io/tslint/rules/jsdoc-format/
   jsdoc-format: true
 
   # https://palantir.github.io/tslint/rules/no-redundant-jsdoc/
   no-redundant-jsdoc: true
-
   # https://palantir.github.io/tslint/rules/no-implicit-dependencies/
   no-implicit-dependencies:
     - true

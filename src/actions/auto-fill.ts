@@ -35,7 +35,7 @@ export async function autoFillInput() {
 
   const errors = Array.from(document.getElementsByClassName('error')) as HTMLElement[];
   if (errors.length > 0) {
-    const errorDetails = errors.map(error => `- ${error.innerText}`).join('\n');
+    const errorDetails = errors.map((error) => `- ${error.innerText}`).join('\n');
     error(
       `Error while autofilling hours for ${data.date.year}-${data.date.month}-${data.date.day} (${data.date.type}). Skipping\n${errorDetails}`
     );
@@ -109,7 +109,7 @@ export async function resetStateAction() {
 
   const state = getState();
   state.action = 'waiting';
-  getDaysToFill().forEach(day => {
+  getDaysToFill().forEach((day) => {
     delete day.autoInput;
   });
 
@@ -180,7 +180,7 @@ function clipStartTime(gateRecording: InputHours, clipTime: string): InputHours 
   if (!clipTime) {
     return gateRecording;
   }
-  const [minH, minM] = clipTime.split(':').map(s => Number(s));
+  const [minH, minM] = clipTime.split(':').map((s) => Number(s));
 
   return {
     ...gateRecording,
@@ -194,7 +194,7 @@ function clipEndTime(gateRecording: InputHours, clipTime: string): InputHours {
   if (!clipTime) {
     return gateRecording;
   }
-  const [maxH, maxM] = clipTime.split(':').map(s => Number(s));
+  const [maxH, maxM] = clipTime.split(':').map((s) => Number(s));
 
   return {
     ...gateRecording,
