@@ -18,7 +18,7 @@ Provide extra information and automatic actions for RHS pages
 
 - Delay the RhsTable initialization until needed to avoid accessing unexisting tables
 - Button to toggle the UI panel in the attendance page
-- Enable shift+click on attendance page checkboxes for multi-selection
+- Enable shift+click on attendance page checkboxes for multi-selection and other UI improvements
 
 ### 0.5.1
 
