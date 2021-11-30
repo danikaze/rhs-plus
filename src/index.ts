@@ -15,6 +15,8 @@ import { hideColumns } from './ui/hide-columns';
 import { loadSettings, Settings } from './utils/settings';
 import { translateWages } from './actions/translate-wages';
 import { enableMultiCheck } from './actions/enable-multi-check';
+import { alignCheckboxes } from './actions/align-checkboxes';
+import { fixButtonLayout } from './actions/fix-button-layout';
 
 window.onload = async () => {
   log(`Extension loaded (v${APP_VERSION})`);
@@ -27,7 +29,9 @@ window.onload = async () => {
       state = await updateState({ days: getHoursPerDay(state.days) });
       settings = await loadSettings();
       hideColumns(settings.columns);
+      alignCheckboxes();
       enableMultiCheck();
+      fixButtonLayout();
       injectUi(state);
       if (isAutoFilling()) {
         autoFillList();

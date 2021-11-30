@@ -60,4 +60,19 @@ export const classes = styleDefinitions({
   buttonLinkDisabled: {
     color: 'grey',
   },
+  dateCol: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  dateCheckbox: {
+    margin: '0 5px',
+  },
+  dateLabel: {
+    flexGrow: '1',
+    textAlign: 'center',
+  },
+  listGreyButtons: {
+    margin: '5px',
+    padding: '1px 5px',
+  },
 });
