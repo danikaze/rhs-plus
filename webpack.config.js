@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const constants = require('./constants');
 
-module.exports = env => {
+module.exports = (env) => {
   const isProd = env === 'production';
 
   return {
@@ -15,6 +15,7 @@ module.exports = env => {
     devtool: isProd ? undefined : 'inline-source-map',
 
     entry: {
+      background: ['src/background.ts'],
       rhsplus: ['src/index.ts'],
       options: ['src/options.ts'],
     },
@@ -55,7 +56,7 @@ module.exports = env => {
       new DefinePlugin({
         ...(() => {
           const c = { ...constants };
-          Object.keys(c).forEach(k => {
+          Object.keys(c).forEach((k) => {
             c[k] = JSON.stringify(c[k]);
           });
           return c;

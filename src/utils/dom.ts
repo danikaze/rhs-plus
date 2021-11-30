@@ -8,6 +8,7 @@ export interface ElementOptions {
   insertTo?: Element;
   insertPosition?: InsertPosition;
   onClick?: (ev: MouseEvent) => void;
+  attributes?: Record<string, string>;
 }
 
 /**
@@ -51,6 +52,12 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
   }
   if (options.insertTo) {
     options.insertTo.insertAdjacentElement(insertPosition, elem);
+  }
+
+  if (options.attributes) {
+    Object.entries(options.attributes).forEach(([attr, value]) => {
+      elem.setAttribute(attr, value);
+    });
   }
 
   return elem;

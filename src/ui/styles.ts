@@ -33,6 +33,15 @@ export const classes = styleDefinitions({
     background: '#dddddd',
     cursor: 'pointer',
   },
+  uiSettingsButton: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: '6px',
+    right: '8px',
+    fontWeight: 'bold',
+    fontSize: '20px',
+    color: 'grey',
+  },
   uiToggleButton: {
     width: '100%',
   },

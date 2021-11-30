@@ -6,8 +6,12 @@ import { autoFillList, resetStateAction } from '../actions/auto-fill';
 import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
 import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
+import { sendMessage } from '../utils/send-message';
 
-type Ui = Record<'container' | 'top' | 'bottom' | 'buttons' | 'stats' | 'toggle', HTMLElement>;
+type Ui = Record<
+  'container' | 'top' | 'bottom' | 'settings' | 'buttons' | 'stats' | 'toggle',
+  HTMLElement
+>;
 
 const ui: Partial<Ui> = {};
 let uiShown = true;
@@ -40,6 +44,14 @@ export function injectUi(state: State) {
       applyStyle(ui.container, [classes.uiContainer, !uiShown && classes.uiContainerHidden]);
       ui.bottom.innerHTML = uiShown ? '△' : '▽';
     },
+  });
+
+  ui.settings = createElement('div', {
+    style: classes.uiSettingsButton,
+    insertTo: ui.top,
+    innerHTML: '⚙',
+    onClick: () => sendMessage({ action: 'openOptionsPage' }),
+    attributes: { title: 'Open options page' },
   });
 
   updateUi(state, isProd);
