@@ -10,6 +10,7 @@ import { createElement } from './utils/dom';
 import { clearState } from './utils/state';
 import { toCamelCase } from './utils/to-camel-case';
 import { toKebabCase } from './utils/to-kebab-case';
+import { COLUMNS_DEFINITION } from './utils/rhs-table/constants';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 let lastSettings: Settings;
@@ -27,6 +28,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       insertTo: day.parentElement,
     });
   }
+
+  // create the list of columns
+  const columnsContainer = document.getElementById('settings-columns');
+  Object.values(COLUMNS_DEFINITION).forEach(({ id, name }) => {
+    createElement('p', {
+      insertTo: columnsContainer,
+      innerHTML: `<label>
+      <input type="checkbox" class="filled-in" id="column-${toKebabCase(id)}" />
+      <span>${name}</span>
+    </label>`,
+    });
+  });
 
   // set buttons behavior
   document.getElementById('btn-save').addEventListener('click', saveValues);
@@ -128,6 +141,7 @@ async function saveValues() {
       totalWorkingHours: false,
       lateNightOvertime: false,
       holidayWork: false,
+      rSatellite: false,
       application: false,
       trainDelay: false,
       report: false,

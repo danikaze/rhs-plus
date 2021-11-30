@@ -24,6 +24,7 @@ export interface ColumnsSettings {
   totalWorkingHours: boolean;
   lateNightOvertime: boolean;
   holidayWork: boolean;
+  rSatellite: boolean;
   application: boolean;
   trainDelay: boolean;
   report: boolean;
@@ -71,6 +72,7 @@ export const defaultSettings: Settings = {
     totalWorkingHours: true,
     lateNightOvertime: true,
     holidayWork: true,
+    rSatellite: true,
     application: true,
     trainDelay: true,
     report: true,
@@ -124,6 +126,11 @@ async function upgradeSettings(settings: Settings): Promise<Settings> {
   // prior 0.5.0
   if (settings.translate === undefined) {
     settings.translate = defaultSettings.translate;
+  }
+
+  // prior 0.6.2
+  if (settings.columns.rSatellite === undefined) {
+    settings.columns.rSatellite = defaultSettings.columns.rSatellite;
   }
 
   // store update settings
