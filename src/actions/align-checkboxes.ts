@@ -13,6 +13,8 @@ export function alignCheckboxes() {
     const cell = row.getCell('date');
     const cb = row.getCheckbox();
     const label = cell.querySelector('label');
+    if (!cb || !label) continue;
+
     cell.innerHTML = '';
     const container = createElement('div', { style: classes.dateCol, insertTo: cell });
     applyStyle(cb, classes.dateCheckbox);

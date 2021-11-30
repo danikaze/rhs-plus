@@ -10,7 +10,9 @@ export function fixButtonLayout() {
   // Move the position of the buttons
   const clearCheckBtn = document.getElementById('BTN_RELEASE_ALL_LOWER');
   const submitButton = document.getElementById('DCMLTSBMT');
-  clearCheckBtn.insertAdjacentElement('afterend', submitButton);
+  if (clearCheckBtn && submitButton) {
+    clearCheckBtn.insertAdjacentElement('afterend', submitButton);
+  }
 
   // Add some margins
   [
@@ -21,6 +23,6 @@ export function fixButtonLayout() {
     'DCMLTSBMT',
   ].forEach((id) => {
     const btn = document.getElementById(id);
-    applyStyle(btn, classes.listGreyButtons);
+    btn && applyStyle(btn, classes.listGreyButtons);
   });
 }
