@@ -123,7 +123,7 @@ function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElem
   });
 
   function startAutoFill() {
-    daysList.forEach(day => {
+    daysList.forEach((day) => {
       day.autoInput = true;
     });
     autoFillList();

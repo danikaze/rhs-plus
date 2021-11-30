@@ -21,7 +21,7 @@ export function extendObjectsOnly<T>(...args: Partial<T>[]): Partial<T> {
     }
 
     // extend the target
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       const value = source[key];
 
       // prevent infinite loops

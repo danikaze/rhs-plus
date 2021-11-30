@@ -15,7 +15,7 @@ export function isWaiting(): boolean {
 }
 
 export function getDaysToFill(): DayInfo[] {
-  return getState().days.filter(day => day.autoInput);
+  return getState().days.filter((day) => day.autoInput);
 }
 
 export function getDraftableDays(): DayInfo[] {
@@ -33,7 +33,7 @@ export function getDraftableDays(): DayInfo[] {
   }
 
   return getState().days.filter(
-    day =>
+    (day) =>
       isBeforeToday(day.date) &&
       day.state !== 'inputted' &&
       day.state !== 'confirmed' &&
@@ -65,5 +65,5 @@ export function getDayInfo(year: number | string, month?: number, day?: number):
 }
 
 export function getDaysByState(state: DayState): DayInfo[] {
-  return getState().days.filter(day => day.state === state);
+  return getState().days.filter((day) => day.state === state);
 }

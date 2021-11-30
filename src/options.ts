@@ -52,7 +52,7 @@ function populateValues(settings: Settings): void {
  * Fill the values of the per day type table
  */
 function populatePerDayTypeTable(settings: Settings): void {
-  Object.keys(settings.dayType).forEach(type => {
+  Object.keys(settings.dayType).forEach((type) => {
     const tr = document.getElementById(`day-${type}`) as HTMLTableRowElement;
     const day = settings.dayType[type];
     populateDayRow(tr, day);
@@ -74,7 +74,7 @@ function populatePerWeekTable(settings: Settings) {
  * Fill the values of the displayed columns
  */
 function populateDisplayedColumns(settings: Settings) {
-  Object.keys(settings.columns).forEach(name => {
+  Object.keys(settings.columns).forEach((name) => {
     if (settings.columns[name]) {
       const input = document.getElementById(`column-${toKebabCase(name)}`) as HTMLInputElement;
       input.checked = true;

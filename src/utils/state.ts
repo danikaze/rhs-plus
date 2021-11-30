@@ -30,7 +30,7 @@ export async function updateState(update?: Partial<State>): Promise<State> {
 }
 
 export function clearState(): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     chrome.storage.local.clear(() => {
       resolve();
       log('State reset.');
@@ -39,8 +39,8 @@ export function clearState(): Promise<void> {
 }
 
 async function loadState(): Promise<State> {
-  return new Promise(resolve => {
-    chrome.storage.local.get({ state: { updated: 0 } }, result => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get({ state: { updated: 0 } }, (result) => {
       const loaded = result.state;
       if (loaded.updated + STATE_TIMEOUT < new Date().getTime()) {
         log('State expired. Creating new one.');
@@ -54,7 +54,7 @@ async function loadState(): Promise<State> {
 }
 
 function saveState(): Promise<void> {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     chrome.storage.local.set({ state }, () => {
       resolve();
       log('State stored', state);

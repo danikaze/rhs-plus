@@ -2,7 +2,7 @@
 // but preserving the list of their keys (instead of being an open list like `string`)
 type closedObject<E> = <T>(et: { [K in keyof T]: E }) => { [K in keyof T]: E };
 
-const styleDefinitions: closedObject<Partial<CSSStyleDeclaration>> = e => e;
+const styleDefinitions: closedObject<Partial<CSSStyleDeclaration>> = (e) => e;
 
 export const classes = styleDefinitions({
   uiContainer: {
