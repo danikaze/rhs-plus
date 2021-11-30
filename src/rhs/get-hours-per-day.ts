@@ -1,6 +1,6 @@
 // tslint:disable: no-magic-numbers
 import { DayState, DayInfo, InputHours } from '../interfaces';
-import { rhsTable } from '../ui/columns';
+import { getRhsTable } from '../ui/columns';
 
 /**
  * Get all the available information for days from the list page
@@ -38,7 +38,7 @@ export function getHoursPerDay(currentInfo?: DayInfo[]): DayInfo[] {
  * Get information from one row
  */
 function getDayRowInfo(year: number, tr: HTMLTableRowElement, rowIndex: number): DayInfo {
-  const row = rhsTable.getDataRow(rowIndex);
+  const row = getRhsTable().getDataRow(rowIndex);
   const dateText = row.getCell('date')!.innerText.toLowerCase();
   const dateMatch = dateText.match(/(\d+)\/(\d+)/);
   const month = Number(dateMatch[1]);

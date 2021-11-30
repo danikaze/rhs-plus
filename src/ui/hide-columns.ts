@@ -1,6 +1,6 @@
 import { ColumnsSettings } from '../utils/settings';
 import { log } from '../utils/log';
-import { rhsTable } from './columns';
+import { getRhsTable } from './columns';
 
 export function hideColumns(settings: ColumnsSettings): void {
   const hiddenColumns = Object.keys(settings).filter(
@@ -12,5 +12,5 @@ export function hideColumns(settings: ColumnsSettings): void {
   }
 
   log(`Hidding columns: ${hiddenColumns.join(', ')}`);
-  rhsTable.hideColumns(hiddenColumns);
+  getRhsTable().hideColumns(hiddenColumns);
 }

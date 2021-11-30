@@ -86,4 +86,11 @@ class RhsTableRow {
   }
 }
 
-export const rhsTable = new RhsTable(document.querySelector('table#APPROVALGRD'));
+let rhsTable: RhsTable;
+
+export function getRhsTable() {
+  if (!rhsTable) {
+    rhsTable = new RhsTable(document.querySelector('table#APPROVALGRD'));
+  }
+  return rhsTable;
+}
