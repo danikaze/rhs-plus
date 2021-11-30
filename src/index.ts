@@ -14,9 +14,10 @@ import { isAutoFilling, isAutoDraftInput, isWaiting } from './utils/state-querie
 import { hideColumns } from './ui/hide-columns';
 import { loadSettings, Settings } from './utils/settings';
 import { translateWages } from './actions/translate-wages';
+import { enableMultiCheck } from './actions/enable-multi-check';
 
 window.onload = async () => {
-  log('Extension loaded');
+  log(`Extension loaded (v${APP_VERSION})`);
   injectFavicon();
   let state = await initState();
   let settings: Settings;
@@ -26,6 +27,7 @@ window.onload = async () => {
       state = await updateState({ days: getHoursPerDay(state.days) });
       settings = await loadSettings();
       hideColumns(settings.columns);
+      enableMultiCheck();
       injectUi(state);
       if (isAutoFilling()) {
         autoFillList();
