@@ -7,13 +7,34 @@ const styleDefinitions: closedObject<Partial<CSSStyleDeclaration>> = e => e;
 export const classes = styleDefinitions({
   uiContainer: {
     position: 'fixed',
-    padding: '15px 5px 5px 5px',
+    display: 'flex',
+    flexDirection: 'column',
     border: '1px solid grey',
     borderRadius: '5px',
     top: '-10px',
     right: '120px',
     background: 'white',
     boxShadow: '0 0 5px 0px rgba(0,0,0,0.25)',
+    overflow: 'hidden',
+    transition: 'top 300ms ease',
+  },
+  uiContainerHidden: {
+    top: '-106px',
+  },
+  uiContainerTop: {
+    padding: '15px 5px 5px 5px',
+  },
+  uiContainerBottom: {
+    display: 'flex',
+    alignContent: 'center',
+    justifyContent: 'center',
+    height: '7px',
+    fontSize: '6px',
+    background: '#dddddd',
+    cursor: 'pointer',
+  },
+  uiToggleButton: {
+    width: '100%',
   },
   summaryInputted: {
     color: '#cccc99',

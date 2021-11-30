@@ -1,5 +1,5 @@
 import { log } from '../utils/log';
-import { createElement } from '../utils/dom';
+import { applyStyle, createElement } from '../utils/dom';
 import { classes } from './styles';
 import { getStats } from '../rhs/get-stats';
 import { autoFillList, resetStateAction } from '../actions/auto-fill';
@@ -7,27 +7,42 @@ import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
 import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
 
-interface Ui {
-  container: HTMLDivElement;
-  buttons: HTMLDivElement;
-  stats: HTMLDivElement;
-}
+type Ui = Record<'container' | 'top' | 'bottom' | 'buttons' | 'stats' | 'toggle', HTMLElement>;
 
 const ui: Partial<Ui> = {};
+let uiShown = true;
 
 /**
  * Inject the UI in the page
+ * I want it so bad to migrate to ReactJS but it's not worth my time...
+ * ...kill me please...
  */
 export function injectUi(state: State) {
   log('Injecting UI');
+  const isProd = process.env.NODE_ENV === 'production';
 
   ui.container = createElement('div', {
-    style: classes.uiContainer,
+    style: [classes.uiContainer, !uiShown && classes.uiContainerHidden],
     insertTo: document.body,
     innerHTML: ``,
   });
 
-  updateUi(state, true);
+  ui.top = createElement('div', {
+    style: classes.uiContainerTop,
+    insertTo: ui.container,
+  });
+  ui.bottom = createElement('div', {
+    style: classes.uiContainerBottom,
+    insertTo: ui.container,
+    innerHTML: uiShown ? '△' : '▽',
+    onClick: () => {
+      uiShown = !uiShown;
+      applyStyle(ui.container, [classes.uiContainer, !uiShown && classes.uiContainerHidden]);
+      ui.bottom.innerHTML = uiShown ? '△' : '▽';
+    },
+  });
+
+  updateUi(state, isProd);
 
   document.body.appendChild(ui.container);
 }
@@ -75,7 +90,7 @@ function createStats(state: State): HTMLDivElement {
   `;
 
   return createElement('div', {
-    insertTo: ui.container,
+    insertTo: ui.top,
     innerHTML: html,
   });
 }
@@ -85,7 +100,7 @@ function createStats(state: State): HTMLDivElement {
  */
 function createButtons(state: State): HTMLDivElement {
   const container = createElement('div', {
-    insertTo: ui.container,
+    insertTo: ui.top,
     style: classes.buttonsContainer,
   });
 
@@ -115,7 +130,6 @@ function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElem
   }
 
   // already auto-filling
-
   if (isAutoFilling()) {
     createElement('span', {
       insertTo: container,

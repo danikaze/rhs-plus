@@ -1,8 +1,8 @@
-type Style = Partial<CSSStyleDeclaration>;
+type Style = Partial<CSSStyleDeclaration> | false | null | undefined;
 
 export interface ElementOptions {
   id?: string;
-  style?: Style;
+  style?: Style | Style[];
   innerText?: string;
   innerHTML?: string;
   insertTo?: Element;
@@ -13,10 +13,14 @@ export interface ElementOptions {
 /**
  * Apply inline style to an element
  */
-export function applyStyle<T extends HTMLElement>(elem: T, style: Style): T {
-  Object.keys(style).forEach(key => {
-    elem.style[key] = style[key];
-  });
+export function applyStyle<T extends HTMLElement>(elem: T, style: Style | Style[]): T {
+  const styles = Array.isArray(style) ? style : [style];
+  for (const s of styles) {
+    if (!s) continue;
+    Object.entries(s).forEach(([key, value]) => {
+      elem.style[key] = value;
+    });
+  }
 
   return elem;
 }
