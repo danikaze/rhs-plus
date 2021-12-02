@@ -5,8 +5,8 @@ import { Page } from '../interfaces';
  */
 export function detectPage(): Page {
   const sn = document.querySelector<HTMLInputElement>('[name="@SN"]');
-  if (sn && sn.value === 'root.cws.wage.wagedetail') return 'wagedetail';
-  if (sn && sn.value === 'root.cws.wage.bonusdetail') return 'bonusdetail';
+  if (sn && sn.value.includes('root.cws.wage.wagedetail')) return 'wagedetail';
+  if (sn && sn.value.includes('root.cws.wage.bonusdetail')) return 'bonusdetail';
 
   const table = document.getElementById('APPROVALGRD');
   if (table) {
