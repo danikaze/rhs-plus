@@ -4,7 +4,7 @@ Provide extra information and automatic actions for RHS pages
 
 ## How to install it in Chrome
 
-1. Install the extension from the [Chrome Store](http://bit.ly/rhs-plus)
+1. Install the extension from the [Chrome Store](https://bit.ly/rhsplus)
 
 ## Change log
 
