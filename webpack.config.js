@@ -7,7 +7,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const constants = require('./constants');
 
 module.exports = (env) => {
-  const isProd = env === 'production';
+  const isProd = !env.development;
 
   return {
     mode: isProd ? 'production' : 'development',
@@ -63,12 +63,14 @@ module.exports = (env) => {
         })(),
         NODE_ENV: JSON.stringify(isProd ? 'production' : 'development'),
       }),
-      new CopyPlugin([
-        { from: 'icons/*', to: '' },
-        { from: 'manifest.json', to: '' },
-        { from: 'src/options.html', to: '' },
-        { from: 'src/assets/*', to: 'assets', flatten: true },
-      ]),
+      new CopyPlugin({
+        patterns: [
+          { from: 'icons/*', to: '' },
+          { from: 'manifest.json', to: '' },
+          { from: 'src/options.html', to: '' },
+          { from: 'src/assets/**/*', to: 'assets/[name][ext]' },
+        ],
+      }),
     ].concat(isProd ? [new CleanWebpackPlugin()] : []),
 
     target: 'node',
@@ -84,7 +86,7 @@ module.exports = (env) => {
 
     optimization: {
       minimize: isProd,
-      namedModules: !isProd,
+      moduleIds: isProd ? 'named' : undefined,
     },
 
     stats: {
