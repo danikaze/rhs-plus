@@ -19,7 +19,7 @@ export const classes = styleDefinitions({
     transition: 'top 300ms ease',
   },
   uiContainerHidden: {
-    top: '-106px',
+    top: '-99px',
   },
   uiContainerTop: {
     padding: '15px 5px 5px 5px',
