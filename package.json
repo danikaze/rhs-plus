@@ -30,7 +30,7 @@
     }
   },
   "devDependencies": {
-    "@types/chrome": "0.0.88",
+    "@types/chrome": "0.0.180",
     "@types/mkdirp": "^0.5.2",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^10.2.4",

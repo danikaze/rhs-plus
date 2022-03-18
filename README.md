@@ -17,6 +17,7 @@ Provide extra information and automatic actions for RHS pages
 ### 0.6.4
 
 - Fix: Avoid UI panel to be completely hidden when clicking the `△` bar, at the attendance screen.
+- Chrome Extension manifest v2 → v3
 
 ### 0.6.3
 
