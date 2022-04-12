@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function populateValues(settings: Settings): void {
   (document.getElementById('translate') as HTMLInputElement).checked = settings.translate;
+  (document.getElementById('update-legend') as HTMLInputElement).checked = settings.updateLegend;
   (document.getElementById('autofill-action') as HTMLInputElement).value = settings.autofillAction;
   populatePerDayTypeTable(settings);
   populatePerWeekTable(settings);
@@ -122,6 +123,7 @@ async function saveValues() {
   const settings: Settings = {
     version: APP_VERSION,
     translate: (document.getElementById('translate') as HTMLInputElement).checked,
+    updateLegend: (document.getElementById('update-legend') as HTMLInputElement).checked,
     autofillAction: (document.getElementById('autofill-action') as HTMLInputElement)
       .value as AutoFillAction,
     dayType: {},
