@@ -12,7 +12,7 @@ import {
 import { autoInputDraftsConfirm } from './actions/auto-input-drafts';
 import { isAutoFilling, isAutoDraftInput, isWaiting } from './utils/state-queries';
 import { hideColumns } from './ui/hide-columns';
-import { loadSettings, Settings } from './utils/settings';
+import { loadSettings } from './utils/settings';
 import { translateWages } from './actions/translate-wages';
 import { enableMultiCheck } from './actions/enable-multi-check';
 import { alignCheckboxes } from './actions/align-checkboxes';
@@ -21,39 +21,38 @@ import { fixButtonLayout } from './actions/fix-button-layout';
 window.onload = async () => {
   log(`Extension loaded (v${APP_VERSION})`);
   injectFavicon();
+  const settings = await loadSettings();
   let state = await initState();
-  let settings: Settings;
 
   switch (state.page) {
     case 'list':
       state = await updateState({ days: getHoursPerDay(state.days) });
-      settings = await loadSettings();
       hideColumns(settings.columns);
       alignCheckboxes();
       enableMultiCheck();
       fixButtonLayout();
-      injectUi(state);
+      injectUi(state, settings.updateLegend);
       if (isAutoFilling()) {
         autoFillList();
       }
       break;
 
     case 'batch':
-      injectUi(state);
+      injectUi(state, settings.updateLegend);
       if (isAutoDraftInput()) {
         autoInputDraftsConfirm();
       }
       break;
 
     case 'input':
-      injectUi(state);
+      injectUi(state, settings.updateLegend);
       if (isAutoFilling()) {
         autoFillInput();
       }
       break;
 
     case 'confirm':
-      injectUi(state);
+      injectUi(state, settings.updateLegend);
       if (isAutoFilling()) {
         autoFillConfirm();
       }
@@ -68,7 +67,6 @@ window.onload = async () => {
 
     case 'wagedetail':
     case 'bonusdetail':
-      settings = await loadSettings();
       if (settings.translate) {
         translateWages();
       }

@@ -34,6 +34,7 @@ export interface ColumnsSettings {
 export interface Settings {
   version: string;
   translate: boolean;
+  updateLegend: boolean;
   autofillAction: AutoFillAction;
   dayType: { [type: string]: WeekDaySettings };
   weekDay: WeekDaySettings[];
@@ -43,6 +44,7 @@ export interface Settings {
 export const defaultSettings: Settings = {
   version: APP_VERSION,
   translate: true,
+  updateLegend: true,
   autofillAction: 'draft',
   dayType: {
     regular: { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },

@@ -7,6 +7,7 @@ import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
 import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
 import { sendMessage } from '../utils/send-message';
+import { replaceLegend } from './legend';
 
 type Ui = Record<
   'container' | 'top' | 'bottom' | 'settings' | 'buttons' | 'stats' | 'toggle',
@@ -21,9 +22,13 @@ let uiShown = true;
  * I want it so bad to migrate to ReactJS but it's not worth my time...
  * ...kill me please...
  */
-export function injectUi(state: State) {
+export function injectUi(state: State, updateLegend: boolean) {
   log('Injecting UI');
   const isProd = process.env.NODE_ENV === 'production';
+
+  if (state.page === 'list' && updateLegend) {
+    replaceLegend();
+  }
 
   ui.container = createElement('div', {
     style: [classes.uiContainer, !uiShown && classes.uiContainerHidden],

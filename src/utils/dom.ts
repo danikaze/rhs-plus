@@ -5,10 +5,11 @@ export interface ElementOptions {
   style?: Style | Style[];
   innerText?: string;
   innerHTML?: string;
+  children?: HTMLElement[];
   insertTo?: Element;
   insertPosition?: InsertPosition;
-  onClick?: (ev: MouseEvent) => void;
   attributes?: Record<string, string>;
+  onClick?: (ev: MouseEvent) => void;
 }
 
 /**
@@ -31,7 +32,7 @@ export function applyStyle<T extends HTMLElement>(elem: T, style: Style | Style[
  */
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tagName: K,
-  options?: ElementOptions
+  options: ElementOptions = {}
 ): HTMLElementTagNameMap[K] {
   const elem = document.createElement(tagName);
   const insertPosition = (options && options.insertPosition) || 'beforeend';
@@ -58,6 +59,10 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     Object.entries(options.attributes).forEach(([attr, value]) => {
       elem.setAttribute(attr, value);
     });
+  }
+
+  if (options.children) {
+    options.children.forEach((child) => elem.appendChild(child));
   }
 
   return elem;
