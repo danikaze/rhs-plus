@@ -1,5 +1,6 @@
 import { DayInfo, DayState, DateInfo } from '../interfaces';
 import { getState } from '../utils/state';
+import { Settings } from './settings';
 
 export function isAutoFilling(): boolean {
   const state = getState();
@@ -18,7 +19,7 @@ export function getDaysToFill(): DayInfo[] {
   return getState().days.filter((day) => day.autoInput);
 }
 
-export function getDraftableDays(): DayInfo[] {
+export function getDraftableDays(settings: Settings): DayInfo[] {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -37,7 +38,7 @@ export function getDraftableDays(): DayInfo[] {
       isBeforeToday(day.date) &&
       day.state !== 'inputted' &&
       day.state !== 'confirmed' &&
-      (day.gateRecording || day.date.type === 'holiday')
+      (day.gateRecording || settings.useDefaultTime !== 'no' || day.date.type === 'holiday')
   );
 }
 

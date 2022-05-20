@@ -1,12 +1,15 @@
 import { log } from './log';
 
 export type AutoFillAction = 'draft' | 'input';
+export type UseDefaultTime = 'no' | 'perDayType' | 'perWeekDay';
 
 export interface WeekDaySettings {
+  defaultStart: string | undefined; // default time to input when no gate time is recorded
+  defaultEnd: string | undefined; // default time to input when no gate time is recorded
   offsetStart: number; // minutes after gate recording-in per week-day
   offsetEnd: number; // minutes before gate recording-out per week-day
-  clipStart: string; // earliest time to input as start time
-  clipEnd: string; // latest time to input as end time
+  clipStart: string | undefined; // earliest time to input as start time
+  clipEnd: string | undefined; // latest time to input as end time
 }
 
 export interface ColumnsSettings {
@@ -39,6 +42,7 @@ export interface Settings {
   dayType: { [type: string]: WeekDaySettings };
   weekDay: WeekDaySettings[];
   columns: ColumnsSettings;
+  useDefaultTime: UseDefaultTime;
 }
 
 export const defaultSettings: Settings = {
@@ -47,17 +51,87 @@ export const defaultSettings: Settings = {
   updateLegend: true,
   autofillAction: 'draft',
   dayType: {
-    regular: { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    asakai: { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
+    regular: {
+      defaultStart: '09:00',
+      defaultEnd: '17:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    asakai: {
+      defaultStart: '08:00',
+      defaultEnd: '16:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
   },
   weekDay: [
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
-    { offsetStart: 0, offsetEnd: 0, clipStart: undefined, clipEnd: undefined },
+    // Sunday
+    {
+      defaultStart: undefined,
+      defaultEnd: undefined,
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Monday
+    {
+      defaultStart: '08:00',
+      defaultEnd: '16:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Tuesday
+    {
+      defaultStart: '09:00',
+      defaultEnd: '17:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Wednesday
+    {
+      defaultStart: '09:00',
+      defaultEnd: '17:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Thursday
+    {
+      defaultStart: '09:00',
+      defaultEnd: '17:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Friday
+    {
+      defaultStart: '09:00',
+      defaultEnd: '17:30',
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
+    // Saturday
+    {
+      defaultStart: undefined,
+      defaultEnd: undefined,
+      offsetStart: 0,
+      offsetEnd: 0,
+      clipStart: undefined,
+      clipEnd: undefined,
+    },
   ],
   columns: {
     date: true,
@@ -80,6 +154,7 @@ export const defaultSettings: Settings = {
     report: true,
     excess: true,
   },
+  useDefaultTime: 'perDayType',
 };
 
 /**
@@ -134,6 +209,27 @@ async function upgradeSettings(settings: Settings): Promise<Settings> {
   if (settings.columns.rSatellite === undefined) {
     settings.columns.rSatellite = defaultSettings.columns.rSatellite;
   }
+
+  // prior 0.6.5
+  if (settings.useDefaultTime === undefined) {
+    settings.useDefaultTime = defaultSettings.useDefaultTime;
+  }
+  settings.weekDay.forEach((day, i) => {
+    if (day.defaultStart === undefined) {
+      day.defaultStart = defaultSettings.weekDay[i].defaultStart;
+    }
+    if (day.defaultEnd === undefined) {
+      day.defaultEnd = defaultSettings.weekDay[i].defaultEnd;
+    }
+  });
+  Object.entries(settings.dayType).forEach(([type, day]) => {
+    if (day.defaultStart === undefined) {
+      day.defaultStart = defaultSettings.weekDay[type].defaultStart;
+    }
+    if (day.defaultEnd === undefined) {
+      day.defaultEnd = defaultSettings.weekDay[type].defaultEnd;
+    }
+  });
 
   // store update settings
   settings.version = APP_VERSION;

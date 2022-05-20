@@ -1,8 +1,9 @@
 import { State } from '../interfaces';
-import { extendObjectsOnly } from './extend-objects-only';
 import { detectPage } from '../rhs/detect-page';
-import { log } from './log';
 import { updateUi } from '../ui';
+import { log } from './log';
+import { extendObjectsOnly } from './extend-objects-only';
+import { Settings } from './settings';
 
 let state: State;
 
@@ -20,10 +21,10 @@ export function getState(): State {
   return state;
 }
 
-export async function updateState(update?: Partial<State>): Promise<State> {
+export async function updateState(settings: Settings, update?: Partial<State>): Promise<State> {
   extendObjectsOnly(state, update);
   state.updated = new Date().getTime();
-  updateUi(state);
+  updateUi(settings, state);
   await saveState();
 
   return state;

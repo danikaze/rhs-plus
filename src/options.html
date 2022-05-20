@@ -60,20 +60,28 @@
         <h5>Common settings</h5>
 
         <div class="row">
-          <p>
+          <p style="padding-left: 0.75rem">
             <label>
               <input type="checkbox" class="filled-in" id="translate" />
               <span>Provide JA → EN translations</span>
             </label>
+            <p>
+              Some pages in RHS (such as <strong>Salary statement</strong>) only provide Japanese texts.
+              Enabling this option will provide translations where available.
+            </p>
           </p>
         </div>
-        
+
         <div class="row">
-          <p>
+          <p style="padding-left: 0.75rem">
             <label>
               <input type="checkbox" class="filled-in" id="update-legend" />
               <span>Update legend styles</span>
             </label>
+            <p>
+              Provide a clearer way to see the color legend in the
+              <strong>Record daily attendance</strong> page
+            </p>
           </p>
         </div>
 
@@ -86,19 +94,52 @@
             <label>Auto-fill action</label>
           </div>
         </div>
+
+        <div class="row">
+          <div class="col s8 m4 l3 input-field">
+            <select id="use-default-time">
+              <option value="no">No</option>
+              <option value="perDayType">Per Day Type</option>
+              <option value="perWeekDay">Per Week Day</option>
+            </select>
+            <label>Use default time</label>
+            <p>
+              If this option is other than <strong>No</strong>, the default time configured on its
+              respective section will be used when there's no gate time recording.
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="section" id="settings-day-type">
         <h5>Settings per day type</h5>
 
+        <p>
+          While <strong>Settings per week-day</strong> are available, this allows to handle cases where Asakai days
+          are moved due to holidays or other cases.
+        </p>
+
         <table class="highlight">
           <thead>
             <tr>
               <th rowspan="2">Day type</th>
+              <th colspan="2">Default</th>
               <th colspan="2">Offset</th>
               <th colspan="2">Clipping</th>
             </tr>
             <tr>
+              <th
+                class="tooltipped"
+                data-tooltip="Default entry time to input on regular days when 'Use Default Time' is set to 'Per Day Type'"
+              >
+                Entry time
+              </th>
+              <th
+                class="tooltipped"
+                data-tooltip="Default exit time to input on regular days when 'Use Default Time' is set to 'Per Day Type'"
+              >
+                Exit time
+              </th>
               <th
                 class="tooltipped"
                 data-tooltip="Number of minutes to delay the start time from the gate recording entry time"
@@ -123,6 +164,12 @@
             <tr id="day-regular">
               <th>Regular</th>
               <td>
+                <input class="default-start" type="time" />
+              </td>
+              <td>
+                <input class="default-end" type="time" />
+              </td>
+              <td>
                 <input class="offset-start" type="number" min="0" max="60" />
               </td>
               <td>
@@ -137,6 +184,12 @@
             </tr>
             <tr id="day-asakai">
               <th>Asakai</th>
+              <td>
+                <input class="default-start" type="time" />
+              </td>
+              <td>
+                <input class="default-end" type="time" />
+              </td>
               <td>
                 <input class="offset-start" type="number" min="0" max="60" />
               </td>
@@ -161,10 +214,23 @@
           <thead>
             <tr>
               <th rowspan="2">Weekday</th>
+              <th colspan="2">Default</th>
               <th colspan="2">Offset</th>
               <th colspan="2">Clipping</th>
             </tr>
             <tr>
+              <th
+                class="tooltipped"
+                data-tooltip="Default entry time to input on each weekday when 'Use Default Time' is set to 'Per Week Day'"
+              >
+                Entry time
+              </th>
+              <th
+                class="tooltipped"
+                data-tooltip="Default exit time to input on each weekday when 'Use Default Time' is set to 'Per Week Day'"
+              >
+                Exit time
+              </th>
               <th
                 class="tooltipped"
                 data-tooltip="Number of minutes to delay the start time from the gate recording entry time"
@@ -189,6 +255,12 @@
             <tr id="day-0">
               <th>Sunday</th>
               <td>
+                <input class="default-start" type="time" />
+              </td>
+              <td>
+                <input class="default-end" type="time" />
+              </td>
+              <td>
                 <input class="offset-start" type="number" min="0" max="60" />
               </td>
               <td>
@@ -207,6 +279,10 @@
 
       <div class="section" id="settings-columns">
         <h5>Displayed columns</h5>
+        <p>
+          Unchecked columns will be hidden in the
+          <strong>Record daily attendance</strong> page
+        </p>
       </div>
     </div>
     <script src="assets/materialize.min.js"></script>

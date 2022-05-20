@@ -5,6 +5,7 @@ import {
   defaultSettings,
   saveSettings,
   AutoFillAction,
+  UseDefaultTime,
 } from './utils/settings';
 import { createElement } from './utils/dom';
 import { clearState } from './utils/state';
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   Object.values(COLUMNS_DEFINITION).forEach(({ id, name }) => {
     createElement('p', {
       insertTo: columnsContainer,
+      style: [{ paddingLeft: '0.75rem' }],
       innerHTML: `<label>
       <input type="checkbox" class="filled-in" id="column-${toKebabCase(id)}" />
       <span>${name}</span>
@@ -56,6 +58,7 @@ function populateValues(settings: Settings): void {
   (document.getElementById('translate') as HTMLInputElement).checked = settings.translate;
   (document.getElementById('update-legend') as HTMLInputElement).checked = settings.updateLegend;
   (document.getElementById('autofill-action') as HTMLInputElement).value = settings.autofillAction;
+  (document.getElementById('use-default-time') as HTMLInputElement).value = settings.useDefaultTime;
   populatePerDayTypeTable(settings);
   populatePerWeekTable(settings);
   populateDisplayedColumns(settings);
@@ -101,6 +104,8 @@ function populateDisplayedColumns(settings: Settings) {
  */
 function populateDayRow(tr: HTMLTableRowElement, settings: WeekDaySettings) {
   if (!settings) return;
+  tr.querySelector<HTMLInputElement>('.default-start').value = String(settings.defaultStart) || '';
+  tr.querySelector<HTMLInputElement>('.default-end').value = String(settings.defaultEnd) || '';
   tr.querySelector<HTMLInputElement>('.offset-start').value = String(settings.offsetStart);
   tr.querySelector<HTMLInputElement>('.offset-end').value = String(settings.offsetEnd);
   tr.querySelector<HTMLInputElement>('.clip-start').value = settings.clipStart || '';
@@ -109,6 +114,8 @@ function populateDayRow(tr: HTMLTableRowElement, settings: WeekDaySettings) {
 
 function readDayRow(tr: HTMLTableRowElement): WeekDaySettings {
   return {
+    defaultStart: tr.querySelector<HTMLInputElement>('.default-start').value,
+    defaultEnd: tr.querySelector<HTMLInputElement>('.default-end').value,
     offsetStart: Number(tr.querySelector<HTMLInputElement>('.offset-start').value),
     offsetEnd: Number(tr.querySelector<HTMLInputElement>('.offset-end').value),
     clipStart: tr.querySelector<HTMLInputElement>('.clip-start').value,
@@ -149,6 +156,8 @@ async function saveValues() {
       report: false,
       excess: false,
     },
+    useDefaultTime: (document.getElementById('use-default-time') as HTMLInputElement)
+      .value as UseDefaultTime,
   };
 
   //
