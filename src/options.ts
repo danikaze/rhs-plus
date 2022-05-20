@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 function populateValues(settings: Settings): void {
   (document.getElementById('translate') as HTMLInputElement).checked = settings.translate;
   (document.getElementById('update-legend') as HTMLInputElement).checked = settings.updateLegend;
+  (document.getElementById('reminder-enabled') as HTMLInputElement).checked =
+    settings.reminderEnabled;
+  (document.getElementById('reminder-time') as HTMLInputElement).value = settings.reminderTime;
   (document.getElementById('autofill-action') as HTMLInputElement).value = settings.autofillAction;
   (document.getElementById('use-default-time') as HTMLInputElement).value = settings.useDefaultTime;
   populatePerDayTypeTable(settings);
@@ -131,6 +134,8 @@ async function saveValues() {
     version: APP_VERSION,
     translate: (document.getElementById('translate') as HTMLInputElement).checked,
     updateLegend: (document.getElementById('update-legend') as HTMLInputElement).checked,
+    reminderEnabled: (document.getElementById('reminder-enabled') as HTMLInputElement).checked,
+    reminderTime: (document.getElementById('reminder-time') as HTMLInputElement).value,
     autofillAction: (document.getElementById('autofill-action') as HTMLInputElement)
       .value as AutoFillAction,
     dayType: {},

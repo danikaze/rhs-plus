@@ -1,4 +1,5 @@
 import { log } from './log';
+import { sendMessage } from './send-message';
 
 export type AutoFillAction = 'draft' | 'input';
 export type UseDefaultTime = 'no' | 'perDayType' | 'perWeekDay';
@@ -43,6 +44,8 @@ export interface Settings {
   weekDay: WeekDaySettings[];
   columns: ColumnsSettings;
   useDefaultTime: UseDefaultTime;
+  reminderEnabled: boolean;
+  reminderTime: string | undefined;
 }
 
 export const defaultSettings: Settings = {
@@ -155,6 +158,8 @@ export const defaultSettings: Settings = {
     excess: true,
   },
   useDefaultTime: 'perDayType',
+  reminderEnabled: true,
+  reminderTime: '17:00',
 };
 
 /**
@@ -165,6 +170,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
     chrome.storage.sync.set({ settings }, () => {
       resolve();
       log('Settings stored', settings);
+      sendMessage({ settings, action: 'settingsUpdated' });
     });
   });
 }
@@ -230,6 +236,12 @@ async function upgradeSettings(settings: Settings): Promise<Settings> {
       day.defaultEnd = defaultSettings.weekDay[type].defaultEnd;
     }
   });
+  if (settings.reminderEnabled === undefined) {
+    settings.reminderEnabled = defaultSettings.reminderEnabled;
+  }
+  if (settings.reminderTime === undefined) {
+    settings.reminderTime = defaultSettings.reminderTime;
+  }
 
   // store update settings
   settings.version = APP_VERSION;
