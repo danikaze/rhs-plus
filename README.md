@@ -18,6 +18,7 @@ Provide extra information and automatic actions for RHS pages
 ### 0.7.0
 
 - Added default time on days without `Gate Recording` by day type and week-day.
+- Added reminder notifications to input RHS
 
 ### 0.6.5
 

@@ -4,6 +4,7 @@ import { updateUi } from '../ui';
 import { log } from './log';
 import { extendObjectsOnly } from './extend-objects-only';
 import { Settings } from './settings';
+import { sendMessage } from './send-message';
 
 let state: State;
 
@@ -27,6 +28,7 @@ export async function updateState(settings: Settings, update?: Partial<State>): 
   updateUi(settings, state);
   await saveState();
 
+  sendMessage({ state, action: 'stateUpdated' });
   return state;
 }
 
@@ -39,7 +41,7 @@ export function clearState(): Promise<void> {
   });
 }
 
-async function loadState(): Promise<State> {
+export async function loadState(): Promise<State> {
   return new Promise((resolve) => {
     chrome.storage.local.get({ state: { updated: 0 } }, (result) => {
       const loaded = result.state;

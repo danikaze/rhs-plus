@@ -1,6 +1,10 @@
-import { DayInfo, DayState, DateInfo } from '../interfaces';
+import { DayInfo, DayState, DateInfo, State } from '../interfaces';
 import { getState } from '../utils/state';
 import { Settings } from './settings';
+
+const ONE_DAY_MS = 86400000;
+const DAY_SUN = 0;
+const DAY_SAT = 6;
 
 export function isAutoFilling(): boolean {
   const state = getState();
@@ -67,4 +71,39 @@ export function getDayInfo(year: number | string, month?: number, day?: number):
 
 export function getDaysByState(state: DayState): DayInfo[] {
   return getState().days.filter((day) => day.state === state);
+}
+
+/**
+ * Get the next working day with the time set as 'HH:MM'
+ */
+export function getNextWorkingDay(state: State, time: string): Date {
+  const now = new Date();
+  const nowStr = now.toLocaleString('ja');
+
+  function toDate(date: DayInfo['date']): Date {
+    return new Date(
+      nowStr
+        .replace(/\d{4}\/\d{1,2}\/\d{1,2}/, `${date.year}/${date.month}/${date.day}`)
+        .replace(/\d\d:\d\d:\d\d/, `${time}:00`)
+    );
+  }
+
+  const nextDayInfo =
+    state.days &&
+    state.days.find(({ date }) => {
+      if (date.type === 'holiday') return false;
+      if (toDate(date).getTime() < now.getTime()) return false;
+      return true;
+    });
+  const nextDay = nextDayInfo && toDate(nextDayInfo.date);
+
+  if (nextDay) return nextDay;
+
+  // if there's no information (last working day of this month),
+  // just return the next weekday of the next month
+  const from = (state.days ? toDate(state.days[state.days.length - 1].date) : now) || now;
+  do {
+    from.setTime(from.getTime() + ONE_DAY_MS);
+  } while (from.getDay() === DAY_SUN || from.getDay() === DAY_SAT);
+  return from;
 }
