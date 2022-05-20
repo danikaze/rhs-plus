@@ -1,13 +1,14 @@
 import { log } from '../utils/log';
 import { applyStyle, createElement } from '../utils/dom';
-import { classes } from './styles';
 import { getStats } from '../rhs/get-stats';
 import { autoFillList, resetStateAction } from '../actions/auto-fill';
 import { autoInputDrafts } from '../actions/auto-input-drafts';
 import { State } from '../interfaces';
 import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
 import { sendMessage } from '../utils/send-message';
+import { Settings } from '../utils/settings';
 import { replaceLegend } from './legend';
+import { classes } from './styles';
 
 type Ui = Record<
   'container' | 'top' | 'bottom' | 'settings' | 'buttons' | 'stats' | 'toggle',
@@ -22,11 +23,11 @@ let uiShown = true;
  * I want it so bad to migrate to ReactJS but it's not worth my time...
  * ...kill me please...
  */
-export function injectUi(state: State, updateLegend: boolean) {
+export function injectUi(settings: Settings, state: State) {
   log('Injecting UI');
   const isProd = process.env.NODE_ENV === 'production';
 
-  if (state.page === 'list' && updateLegend) {
+  if (state.page === 'list' && settings.updateLegend) {
     replaceLegend();
   }
 
@@ -59,7 +60,7 @@ export function injectUi(state: State, updateLegend: boolean) {
     attributes: { title: 'Open options page' },
   });
 
-  updateUi(state, isProd);
+  updateUi(settings, state, isProd);
 
   document.body.appendChild(ui.container);
 }
@@ -67,26 +68,31 @@ export function injectUi(state: State, updateLegend: boolean) {
 /**
  * Modify the UI based on the current state
  */
-export function updateUi(state: State, silence: boolean = false) {
+export function updateUi(settings: Settings, state: State, silence: boolean = false) {
   if (!ui.container) return;
   if (!silence) log('Updating UI');
 
-  updateUiElement(state, 'stats', createStats);
-  updateUiElement(state, 'buttons', createButtons);
+  updateUiElement(settings, state, 'stats', createStats);
+  updateUiElement(settings, state, 'buttons', createButtons);
 }
 
 /** Recreate a UI element */
-function updateUiElement(state: State, element: keyof Ui, fn: (state: State) => HTMLDivElement) {
+function updateUiElement(
+  settings: Settings,
+  state: State,
+  element: keyof Ui,
+  fn: (settings: Settings, state: State) => HTMLDivElement
+) {
   if (ui[element]) {
     ui[element].parentElement.removeChild(ui[element]);
   }
-  ui[element] = fn(state);
+  ui[element] = fn(settings, state);
 }
 
 /**
  *
  */
-function createStats(state: State): HTMLDivElement {
+function createStats(settings: Settings, state: State): HTMLDivElement {
   const { summary, average } = getStats(state);
   // tslint:disable-next-line: no-magic-numbers
   const avgH = String(Math.floor(average / 60)).padStart(2, '0');
@@ -115,15 +121,15 @@ function createStats(state: State): HTMLDivElement {
 /**
  *
  */
-function createButtons(state: State): HTMLDivElement {
+function createButtons(settings: Settings, state: State): HTMLDivElement {
   const container = createElement('div', {
     insertTo: ui.top,
     style: classes.buttonsContainer,
   });
 
-  createAutoFillButton(state, container);
+  createAutoFillButton(settings, state, container);
   if (state.page === 'list') {
-    createInputDraftsButtons(container);
+    createInputDraftsButtons(settings, container);
   }
 
   return container;
@@ -132,8 +138,12 @@ function createButtons(state: State): HTMLDivElement {
 /**
  *
  */
-function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElement {
-  const daysList = getDraftableDays();
+function createAutoFillButton(
+  settings: Settings,
+  state: State,
+  parent: HTMLDivElement
+): HTMLDivElement {
+  const daysList = getDraftableDays(settings);
 
   const container = createElement('div', {
     insertTo: parent,
@@ -143,14 +153,14 @@ function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElem
     daysList.forEach((day) => {
       day.autoInput = true;
     });
-    autoFillList();
+    autoFillList(settings);
   }
 
   // already auto-filling
   if (isAutoFilling()) {
     createElement('span', {
       insertTo: container,
-      onClick: resetStateAction,
+      onClick: () => resetStateAction(settings),
       innerText: `Stop auto ${INPUT_TYPE}`,
       style: classes.buttonLink,
     });
@@ -170,7 +180,7 @@ function createAutoFillButton(state: State, parent: HTMLDivElement): HTMLDivElem
 /**
  *
  */
-function createInputDraftsButtons(parent: HTMLDivElement): HTMLDivElement {
+function createInputDraftsButtons(settings: Settings, parent: HTMLDivElement): HTMLDivElement {
   const drafted = getDaysByState('draft');
   const container = createElement('div', {
     insertTo: parent,
@@ -178,7 +188,7 @@ function createInputDraftsButtons(parent: HTMLDivElement): HTMLDivElement {
 
   createElement('span', {
     insertTo: container,
-    onClick: drafted.length ? autoInputDrafts : undefined,
+    onClick: drafted.length ? () => autoInputDrafts(settings) : undefined,
     innerText: 'Auto input drafts',
     style: drafted.length ? classes.buttonLink : classes.buttonLinkDisabled,
   });

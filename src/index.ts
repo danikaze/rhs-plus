@@ -1,5 +1,5 @@
 import { log } from './utils/log';
-import { injectUi } from './ui/index';
+import { injectUi } from './ui';
 import { injectFavicon } from './ui/favicon';
 import { initState, updateState } from './utils/state';
 import { getHoursPerDay } from './rhs/get-hours-per-day';
@@ -26,41 +26,41 @@ window.onload = async () => {
 
   switch (state.page) {
     case 'list':
-      state = await updateState({ days: getHoursPerDay(state.days) });
+      state = await updateState(settings, { days: getHoursPerDay(state.days) });
       hideColumns(settings.columns);
       alignCheckboxes();
       enableMultiCheck();
       fixButtonLayout();
-      injectUi(state, settings.updateLegend);
+      injectUi(settings, state);
       if (isAutoFilling()) {
-        autoFillList();
+        autoFillList(settings);
       }
       break;
 
     case 'batch':
-      injectUi(state, settings.updateLegend);
+      injectUi(settings, state);
       if (isAutoDraftInput()) {
-        autoInputDraftsConfirm();
+        autoInputDraftsConfirm(settings);
       }
       break;
 
     case 'input':
-      injectUi(state, settings.updateLegend);
+      injectUi(settings, state);
       if (isAutoFilling()) {
-        autoFillInput();
+        autoFillInput(settings);
       }
       break;
 
     case 'confirm':
-      injectUi(state, settings.updateLegend);
+      injectUi(settings, state);
       if (isAutoFilling()) {
-        autoFillConfirm();
+        autoFillConfirm(settings);
       }
       break;
 
     case 'error':
       if (!isWaiting()) {
-        resetStateAction();
+        resetStateAction(settings);
         (document.querySelector('#maincontentsbody > form > a') as HTMLElement).click();
       }
       break;

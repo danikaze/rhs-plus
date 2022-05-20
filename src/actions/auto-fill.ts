@@ -1,8 +1,8 @@
 import { InputHours, DateInfo } from '../interfaces';
-import { error, log } from '../utils/log';
+import { error, log, warn } from '../utils/log';
 import { updateState, getState } from '../utils/state';
 import { getDayInfo, getDaysToFill, isAutoFilling } from '../utils/state-queries';
-import { loadSettings, Settings } from '../utils/settings';
+import { Settings } from '../utils/settings';
 
 const MIN_IN_HOUR = 60;
 
@@ -10,24 +10,24 @@ const MIN_IN_HOUR = 60;
  * From the list page, set the state action to auto-filling and
  * get the first day to fill, and start with it
  */
-export async function autoFillList() {
+export async function autoFillList(settings: Settings) {
   const days = getDaysToFill();
 
   if (!days.length) {
     log('Nothing to autofill in the list. Stopping');
-    await resetStateAction();
+    await resetStateAction(settings);
     return;
   }
 
   log('Autofilling day hours from the list');
-  await updateState({ action: 'autofill' });
+  await updateState(settings, { action: 'autofill' });
   days[0].inputButton.click();
 }
 
 /**
  * In the input page, insert the data and submit it
  */
-export async function autoFillInput() {
+export async function autoFillInput(settings: Settings) {
   if (!isAutoFilling()) return;
 
   const data = getDayInfo(document.querySelector<HTMLElement>('#HD > tbody > tr > td').innerText);
@@ -41,7 +41,7 @@ export async function autoFillInput() {
     );
 
     data.autoInput = false;
-    await updateState();
+    await updateState(settings);
 
     (document.querySelector('[name="btnGoBack0"]') as HTMLElement).click();
     return;
@@ -53,12 +53,11 @@ export async function autoFillInput() {
 
   if (!data) {
     error('Day not found');
-    await resetStateAction();
+    await resetStateAction(settings);
   }
 
-  if (data.gateRecording) {
-    const settings = await loadSettings();
-    const input = getDayInputHours(data.gateRecording, data.date, settings);
+  const input = getDayInputHours(data.gateRecording, data.date, settings);
+  if (input) {
     (document.getElementById('KNMTMRNGSTD') as HTMLSelectElement).value = String(
       input.entryDay || 0
     );
@@ -69,11 +68,10 @@ export async function autoFillInput() {
     );
     (document.getElementById('KNMTMRNGETH') as HTMLInputElement).value = String(input.exitH);
     (document.getElementById('KNMTMRNGETM') as HTMLInputElement).value = String(input.exitM);
-
     // if there's no gate recording data and it's not a weekday, we don't touch it
   } else if (data.date.type !== 'holiday') {
     data.state = 'unknown';
-    await updateState();
+    await updateState(settings);
 
     (document.querySelector('[name="btnGoBack0"]') as HTMLElement).click();
     return;
@@ -85,7 +83,7 @@ export async function autoFillInput() {
 /**
  * In the input confirmation page, submit the data
  */
-export async function autoFillConfirm() {
+export async function autoFillConfirm(settings: Settings) {
   if (!isAutoFilling()) return;
 
   const day = getDayInfo(document.getElementById('daily_aera_inside').innerText);
@@ -97,14 +95,14 @@ export async function autoFillConfirm() {
       : document.getElementById('dSubmission0');
 
   day.autoInput = false;
-  await updateState();
+  await updateState(settings);
   button.click();
 }
 
 /**
  *
  */
-export async function resetStateAction() {
+export async function resetStateAction(settings: Settings) {
   log('Stopping autofill');
 
   const state = getState();
@@ -113,7 +111,7 @@ export async function resetStateAction() {
     delete day.autoInput;
   });
 
-  await updateState();
+  await updateState(settings);
 }
 
 /**
@@ -123,8 +121,30 @@ function getDayInputHours(
   gateRecording: InputHours,
   dateInfo: DateInfo,
   settings: Settings
-): InputHours {
+): InputHours | undefined {
+  if (!gateRecording && settings.useDefaultTime === 'no') return;
   const dayDate = new Date(`${dateInfo.year}-${dateInfo.month}-${dateInfo.day}`);
+  if (!gateRecording) {
+    const daySetting =
+      settings.useDefaultTime === 'perDayType'
+        ? settings.dayType[dateInfo.type]
+        : settings.weekDay[dayDate.getDay()];
+
+    try {
+      const entry = timeToObject(daySetting.defaultStart);
+      const exit = timeToObject(daySetting.defaultEnd);
+      return entry && exit
+        ? {
+            entryH: entry[0],
+            entryM: entry[1],
+            exitH: exit[0],
+            exitM: exit[1],
+          }
+        : undefined;
+    } catch (e) {
+      warn(e);
+    }
+  }
   const weekDaySettings = settings.weekDay[dayDate.getDay()];
   const dayTypeSettings = settings.dayType[dateInfo.type];
 
@@ -174,6 +194,14 @@ function addMinutes(prefix: string, offset: number, time: InputHours): EntryTime
     [`${prefix}H`]: h,
     [`${prefix}M`]: m,
   } as EntryTime | ExitTime;
+}
+
+function timeToObject(time: string | undefined): [number, number] | undefined {
+  if (!time) return;
+  const [h, m] = time.split(':').map((s) => Number(s));
+  if (isNaN(h) || isNaN(m)) throw new Error(`Wrong time: "${time}"`);
+
+  return [h, m];
 }
 
 function clipStartTime(gateRecording: InputHours, clipTime: string): InputHours {

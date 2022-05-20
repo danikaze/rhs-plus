@@ -1,17 +1,18 @@
 import { updateState, getState } from '../utils/state';
 import { getDaysByState } from '../utils/state-queries';
 import { log } from '../utils/log';
+import { Settings } from '../utils/settings';
 import { resetStateAction } from './auto-fill';
 
 /**
  *
  */
-export async function autoInputDrafts() {
+export async function autoInputDrafts(settings: Settings) {
   const drafted = getDaysByState('draft');
 
   if (drafted.length === 0) {
     log('No drafted days to input');
-    await resetStateAction();
+    await resetStateAction(settings);
     return;
   }
 
@@ -21,17 +22,17 @@ export async function autoInputDrafts() {
     checkbox.checked = true;
   });
 
-  await updateState({ action: 'autoinput' });
+  await updateState(settings, { action: 'autoinput' });
   document.getElementById('DCMLTSBMT').click();
 }
 
 /**
  *
  */
-export async function autoInputDraftsConfirm() {
+export async function autoInputDraftsConfirm(settings: Settings) {
   if (getState().action !== 'autoinput') return;
 
   log('Confirming the bulk input');
-  await resetStateAction();
+  await resetStateAction(settings);
   document.getElementById('btnExec1').click();
 }
