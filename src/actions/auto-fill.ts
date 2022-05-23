@@ -129,6 +129,7 @@ function getDayInputHours(
       settings.useDefaultTime === 'perDayType'
         ? settings.dayType[dateInfo.type]
         : settings.weekDay[dayDate.getDay()];
+    if (!daySetting) return;
 
     try {
       const entry = timeToObject(daySetting.defaultStart);
