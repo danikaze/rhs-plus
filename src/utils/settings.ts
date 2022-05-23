@@ -230,10 +230,10 @@ async function upgradeSettings(settings: Settings): Promise<Settings> {
   });
   Object.entries(settings.dayType).forEach(([type, day]) => {
     if (day.defaultStart === undefined) {
-      day.defaultStart = defaultSettings.weekDay[type].defaultStart;
+      day.defaultStart = defaultSettings.dayType[type].defaultStart;
     }
     if (day.defaultEnd === undefined) {
-      day.defaultEnd = defaultSettings.weekDay[type].defaultEnd;
+      day.defaultEnd = defaultSettings.dayType[type].defaultEnd;
     }
   });
   if (settings.reminderEnabled === undefined) {
