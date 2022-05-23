@@ -13,7 +13,10 @@ Provide extra information and automatic actions for RHS pages
 - Better display of working hours (color-based)
 - Set rules to input hours/ignore days based on criteria (_i.e. don't register work hours if the working time is less than 3 hours in a weekend_)
 - Add anotations in the list page to be applied by the auto filler (_i.e. comments to be input in a day, etc._)
-- Reminder alert (display a notification to record hours)
+
+### 0.7.2
+
+- Fix auto-fill on weekends after adding Default Hours settings
 
 ### 0.7.1
 
