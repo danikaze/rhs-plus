@@ -15,6 +15,10 @@ Provide extra information and automatic actions for RHS pages
 - Add anotations in the list page to be applied by the auto filler (_i.e. comments to be input in a day, etc._)
 - Reminder alert (display a notification to record hours)
 
+### 0.7.2
+
+- Fix auto-fill on weekends after adding Default Hours settings
+
 ### 0.7.1
 
 - Fix bug when upgrading settings from 0.6.5
