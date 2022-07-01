@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function populateValues(settings: Settings): void {
+  (document.getElementById('satellite') as HTMLInputElement).checked = settings.autoCheckSatellite;
   (document.getElementById('translate') as HTMLInputElement).checked = settings.translate;
   (document.getElementById('update-legend') as HTMLInputElement).checked = settings.updateLegend;
   (document.getElementById('reminder-enabled') as HTMLInputElement).checked =
@@ -132,6 +133,7 @@ function readDayRow(tr: HTMLTableRowElement): WeekDaySettings {
 async function saveValues() {
   const settings: Settings = {
     version: APP_VERSION,
+    autoCheckSatellite: (document.getElementById('satellite') as HTMLInputElement).checked,
     translate: (document.getElementById('translate') as HTMLInputElement).checked,
     updateLegend: (document.getElementById('update-legend') as HTMLInputElement).checked,
     reminderEnabled: (document.getElementById('reminder-enabled') as HTMLInputElement).checked,

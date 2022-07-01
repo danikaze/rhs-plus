@@ -40,6 +40,7 @@ export interface Settings {
   translate: boolean;
   updateLegend: boolean;
   autofillAction: AutoFillAction;
+  autoCheckSatellite: boolean;
   dayType: { [type: string]: WeekDaySettings };
   weekDay: WeekDaySettings[];
   columns: ColumnsSettings;
@@ -53,6 +54,7 @@ export const defaultSettings: Settings = {
   translate: true,
   updateLegend: true,
   autofillAction: 'draft',
+  autoCheckSatellite: true,
   dayType: {
     regular: {
       defaultStart: '09:00',
@@ -241,6 +243,11 @@ async function upgradeSettings(settings: Settings): Promise<Settings> {
   }
   if (settings.reminderTime === undefined) {
     settings.reminderTime = defaultSettings.reminderTime;
+  }
+
+  // prior 0.8.0
+  if (settings.autoCheckSatellite === undefined) {
+    settings.autoCheckSatellite = defaultSettings.autoCheckSatellite;
   }
 
   // store update settings

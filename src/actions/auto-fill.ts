@@ -77,6 +77,11 @@ export async function autoFillInput(settings: Settings) {
     return;
   }
 
+  if (settings.autoCheckSatellite) {
+    const checked = data.date.type !== 'holiday' && data.gateRecording === undefined;
+    (document.getElementById('GI_CHECKBOX13_Seq0') as HTMLInputElement).checked = checked;
+  }
+
   document.getElementById('btnNext0').click();
 }
 
