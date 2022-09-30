@@ -42,6 +42,7 @@ const JPEN = {
   休日労働時間: 'Hours worked in weekend/holiday',
 
   // [支給（Payment)]
+  賞与: 'Bonus',
   支給: 'Payment',
   月額給与: 'Monthly salary',
   月額給与調整: 'Monthly salary adjustment',
