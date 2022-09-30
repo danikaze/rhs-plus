@@ -15,7 +15,7 @@ Provide extra information and automatic actions for RHS pages
 
 ###
 
-- RHS+ events log storage in the Settings page
+- Fix a bug that breaks the extension when a holiday was applied but not yet approved
 
 ### 0.8.0
 

@@ -4,6 +4,7 @@ import { COLUMN_IDS } from './constants';
 
 export class RhsTableRow {
   private static readonly CLASS_STATE_MAP: { [k: string]: DayState } = {
+    mg_app_approving: 'approving',
     mg_app_approved: 'holiday',
     mg_dc_saved: 'inputted',
     mg_dc_confirmed: 'confirmed',
@@ -57,7 +58,7 @@ export class RhsTableRow {
 
   public getState(): DayState {
     const statusClass = this.getCell('status').className.toLowerCase();
-    return RhsTableRow.CLASS_STATE_MAP[statusClass];
+    return RhsTableRow.CLASS_STATE_MAP[statusClass] || 'unknown';
   }
 
   public getWorkedMinutes(): number {

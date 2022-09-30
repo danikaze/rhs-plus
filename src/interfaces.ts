@@ -1,4 +1,11 @@
-export type DayState = 'pending' | 'draft' | 'inputted' | 'confirmed' | 'holiday' | 'unknown';
+export type DayState =
+  | 'approving' // holiday applied but not yet approved
+  | 'pending' // not input yet
+  | 'draft' // saved as draft
+  | 'inputted' // input completed
+  | 'confirmed' //
+  | 'holiday' // confirmed holiday
+  | 'unknown';
 export type DayType = 'regular' | 'asakai' | 'holiday';
 export type Page =
   | 'list'
