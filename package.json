@@ -34,6 +34,7 @@
     "@types/mkdirp": "^0.5.2",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^10.2.4",
+    "file-loader": "^6.2.0",
     "husky": "^3.0.5",
     "prettier": "^2.5.0",
     "rimraf": "^3.0.0",
