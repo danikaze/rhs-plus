@@ -68,7 +68,13 @@ module.exports = (env) => {
           { from: 'icons/*', to: '' },
           { from: 'manifest.json', to: '' },
           { from: 'src/options.html', to: '' },
-          { from: 'src/assets/**/*', to: 'assets/[name][ext]' },
+          {
+            from: 'src/assets/**/*',
+            to: 'assets/[name][ext]',
+            globOptions: {
+              ignore: ['**/*.md'],
+            },
+          },
         ],
       }),
     ].concat(isProd ? [new CleanWebpackPlugin()] : []),

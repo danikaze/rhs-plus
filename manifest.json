@@ -40,7 +40,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["icons/icon128.png"],
+      "resources": ["*.png"],
       "matches": ["https://*/*"]
     }
   ]

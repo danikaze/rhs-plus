@@ -1,6 +1,7 @@
 import { log } from './utils/log';
 import { injectUi } from './ui';
 import { injectFavicon } from './ui/favicon';
+import { injectLogo } from './ui/logo';
 import { initState, updateState } from './utils/state';
 import { getHoursPerDay } from './rhs/get-hours-per-day';
 import {
@@ -21,6 +22,7 @@ import { fixButtonLayout } from './actions/fix-button-layout';
 window.onload = async () => {
   log(`Extension loaded (v${APP_VERSION})`);
   injectFavicon();
+  injectLogo();
   const settings = await loadSettings();
   let state = await initState();
 
