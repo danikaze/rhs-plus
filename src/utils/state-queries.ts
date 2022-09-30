@@ -42,6 +42,7 @@ export function getDraftableDays(settings: Settings): DayInfo[] {
       isBeforeToday(day.date) &&
       day.state !== 'inputted' &&
       day.state !== 'confirmed' &&
+      day.state !== 'approving' &&
       (day.gateRecording || settings.useDefaultTime !== 'no' || day.date.type === 'holiday')
   );
 }

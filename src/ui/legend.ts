@@ -1,3 +1,4 @@
+import { coalesce } from '../utils/coalesce';
 import { createElement } from '../utils/dom';
 import { log, warn } from '../utils/log';
 
@@ -7,21 +8,30 @@ interface LegendItem {
   className: string;
 }
 
-const TOP_FIRST_BUTTON_ID = 'BTNCLC0';
-const TOP_LAST_BUTTON_ID = 'BTNSBMT0';
-const BOTTOM_FIRST_BUTTON_ID = 'BTN_CHECK_ALL_UPPER';
+/*
+ * Legend improvement detects the position based on other elements (the actions buttons)
+ * Sometimes this button changes depending on the context (i.e. when a holiday is applied but not approved)
+ * This is why the IDs are a list of possible values and not unique
+ */
+// Id of the first button over the legend
+const TOP_FIRST_BUTTONS_ID = ['BTNCLC0', 'TFIGRD']; // [Calculate, Approver table]
+// Id of the last button over the legend
+const TOP_LAST_BUTTONS_ID = ['BTNSBMT0', 'MLTDLT0', 'TFIGRD']; // [, Clear draft, Approver table]
+// Id of the first button below the legend
+const BOTTOM_FIRST_BUTTONS_ID = ['BTN_CHECK_ALL_UPPER']; // [Check all]
 
 export function replaceLegend(): void {
   log('Injecting improved legend');
 
-  const items = getLegendItems(TOP_LAST_BUTTON_ID, BOTTOM_FIRST_BUTTON_ID);
-  removeOldLegend(TOP_LAST_BUTTON_ID, BOTTOM_FIRST_BUTTON_ID);
-  createNewLegend(items);
+  const items = getLegendItems(TOP_LAST_BUTTONS_ID, BOTTOM_FIRST_BUTTONS_ID);
+  removeOldLegend(TOP_LAST_BUTTONS_ID, BOTTOM_FIRST_BUTTONS_ID);
+  createNewLegend(items, TOP_LAST_BUTTONS_ID);
 }
 
-function removeOldLegend(firstId: string, lastId: string): void {
-  const first = document.getElementById(firstId);
-  const parent = first?.parentElement;
+function removeOldLegend(firstIds: readonly string[], lastIds: readonly string[]): void {
+  const firstId = getExistingElementId(firstIds);
+  const lastId = getExistingElementId(lastIds);
+  const parent = document.getElementById(firstId)?.parentElement;
 
   if (!parent || document.getElementById(lastId)?.parentElement !== parent) {
     warn(`#${firstId} and #${lastId} should have the same parents`);
@@ -42,7 +52,8 @@ function removeOldLegend(firstId: string, lastId: string): void {
   }
 
   // remove the extra "<br>" elements left
-  const afterBr = document.getElementById(TOP_FIRST_BUTTON_ID);
+  const topFirstId = getExistingElementId(TOP_FIRST_BUTTONS_ID);
+  const afterBr = document.getElementById(topFirstId);
   children = Array.from(parent.childNodes) as HTMLElement[];
   let elemBrIndex = children.indexOf(afterBr);
   while (children[elemBrIndex - 1].tagName?.toUpperCase() === 'BR') {
@@ -60,7 +71,9 @@ function removeOldLegend(firstId: string, lastId: string): void {
   });
 }
 
-function getLegendItems(firstId: string, lastId: string): LegendItem[] {
+function getLegendItems(firstIds: readonly string[], lastIds: readonly string[]): LegendItem[] {
+  const firstId = getExistingElementId(firstIds);
+  const lastId = getExistingElementId(lastIds);
   const parent = document.getElementById(firstId)?.parentElement;
 
   if (!parent || document.getElementById(lastId)?.parentElement !== parent) {
@@ -113,8 +126,8 @@ function getLegendItems(firstId: string, lastId: string): LegendItem[] {
   }));
 }
 
-function createNewLegend(items: LegendItem[]): HTMLElement {
-  const preButton = document.getElementById(TOP_LAST_BUTTON_ID);
+function createNewLegend(items: LegendItem[], lastIds: readonly string[]): HTMLElement {
+  const preButton = getElementByIds(lastIds);
 
   const title = createElement('div', {
     innerHTML: `Row color legend <img src="${chrome.runtime.getURL(
@@ -173,4 +186,12 @@ function createNewLegend(items: LegendItem[]): HTMLElement {
       border: '1px solid rgba(0,0,0,0.5)',
     },
   });
+}
+
+function getElementByIds<E extends HTMLElement = HTMLElement>(ids: readonly string[]): E | null {
+  return coalesce(...ids.map((id) => document.getElementById(id))) as E | null;
+}
+
+function getExistingElementId<T extends string>(ids: readonly T[]): T | null {
+  return coalesce(...ids.map((id) => (document.getElementById(id) ? id : null)));
 }
