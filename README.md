@@ -16,6 +16,7 @@ Provide extra information and automatic actions for RHS pages
 ###
 
 - Inject logo (replace existing one)
+- Add missing translation in the bonus page
 
 ### 0.8.1
 
