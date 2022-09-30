@@ -1,4 +1,4 @@
-# RHS Plus
+<img src="./icons/icon96.png" />
 
 Provide extra information and automatic actions for RHS pages
 
