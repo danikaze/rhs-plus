@@ -12,6 +12,7 @@ import { clearState } from './utils/state';
 import { toCamelCase } from './utils/to-camel-case';
 import { toKebabCase } from './utils/to-kebab-case';
 import { COLUMNS_DEFINITION } from './utils/rhs-table/constants';
+import { showLogs } from './utils/logs';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 let lastSettings: Settings;
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('btn-restore').addEventListener('click', restoreValues);
   document.getElementById('btn-default').addEventListener('click', setDefaultValues);
   document.getElementById('btn-reset').addEventListener('click', resetState);
+  document.getElementById('btn-logs').addEventListener('click', showLogs);
 
   // populate tables
   lastSettings = await loadSettings();

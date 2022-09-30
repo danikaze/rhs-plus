@@ -1,4 +1,4 @@
-type Style = Partial<CSSStyleDeclaration> | false | null | undefined;
+export type Style = Partial<CSSStyleDeclaration> | false | null | undefined;
 
 export interface ElementOptions {
   id?: string;
