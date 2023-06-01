@@ -86,6 +86,7 @@ const JPEN = {
 
   // [合計欄 (Totals)]
   合計欄: 'Totals',
+  課税支給合計: 'Taxable payment',
   支給額合計: 'Total payment',
   社会保険料合計: 'Total social insurance payment',
   控除額合計: 'Total deductions',
