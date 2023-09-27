@@ -68,7 +68,6 @@ window.onload = async () => {
       break;
 
     case 'wagedetail':
-    case 'bonusdetail':
       if (settings.translate) {
         translateWages();
       }

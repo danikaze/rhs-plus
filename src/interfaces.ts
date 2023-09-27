@@ -7,15 +7,7 @@ export type DayState =
   | 'holiday' // confirmed holiday
   | 'unknown';
 export type DayType = 'regular' | 'asakai' | 'holiday';
-export type Page =
-  | 'list'
-  | 'input'
-  | 'confirm'
-  | 'logout'
-  | 'error'
-  | 'batch'
-  | 'wagedetail'
-  | 'bonusdetail';
+export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch' | 'wagedetail';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
 export type InputOffsetDay = -1 | 0 | 1;
 
