@@ -1,6 +1,5 @@
 export function translateWages() {
-  translateTable(document.querySelector<HTMLTableElement>('table#main'));
-  translateTable(document.querySelector<HTMLTableElement>('table#sub'));
+  translateTable(document.querySelector<HTMLTableElement>('table.expand_kyuyo'));
 }
 
 function translateTable(table: HTMLTableElement | null): void {
