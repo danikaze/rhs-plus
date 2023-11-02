@@ -13,12 +13,11 @@ Provide extra information and automatic actions for RHS pages
 - Set rules to input hours/ignore days based on criteria (_i.e. don't register work hours if the working time is less than 3 hours in a weekend_)
 - Add anotations in the list page to be applied by the auto filler (_i.e. comments to be input in a day, etc._)
 
-###
+### 0.9.0
 
-- Inject logo (replace existing one)
-- Add missing translation in the bonus page
+- Added projected average worked hours including in the calculation the days rest of the days of the month (as it was working before 0.9.0) vs only the days worked up to the date.
 
-## 0.8.2
+### 0.8.2
 
 - Update web element detection after RHS changed some HTML code, to make wage translations keep working.
 

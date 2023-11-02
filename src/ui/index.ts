@@ -93,29 +93,44 @@ function updateUiElement(
  *
  */
 function createStats(settings: Settings, state: State): HTMLDivElement {
-  const { summary, average } = getStats(state);
-  // tslint:disable-next-line: no-magic-numbers
-  const avgH = String(Math.floor(average / 60)).padStart(2, '0');
-  // tslint:disable-next-line: no-magic-numbers
-  const avgM = String(Math.floor(average) % 60).padStart(2, '0');
-  const avgTime = avgH === 'NaN' || avgM === 'NaN' ? 'N/A' : `${avgH}:${avgM}`;
+  const { summary, workedAverage, projectedAverage } = getStats(state);
+  const workedAvg = getAverageTimeString(workedAverage);
+  const projectedAvg = getAverageTimeString(projectedAverage);
+
+  const projectedWorkHtml =
+    workedAvg === projectedAvg
+      ? ''
+      : `
+  <div style="font-size: smaller">
+    Projected average:
+    <b>${projectedAvg}</b>
+  </div>`;
+
   const html = `
-    <div>
-      <span style="color: #cccc99" title="Number of inputted days">${summary.inputted}</span> /
-      <span style="color: #d584e0" title="Number of holidays">${summary.holiday}</span> /
-      <span style="color: #49bd49" title="Number of drafted days">${summary.draft}</span> /
-      <span style="color: #a2a2a2" title="Number of pending days">${summary.pending}</span>
-    </div>
-    <div style="font-size: smaller">
-      Average worked hours per day:
-      <b>${avgTime}</b>
-    </div>
+  <div>
+    <span style="color: #cccc99" title="Number of inputted days">${summary.inputted}</span> /
+    <span style="color: #d584e0" title="Number of holidays">${summary.holiday}</span> /
+    <span style="color: #49bd49" title="Number of drafted days">${summary.draft}</span> /
+    <span style="color: #a2a2a2" title="Number of pending days">${summary.pending}</span>
+  </div>
+  <div style="font-size: smaller">
+    Average worked hours per day:
+    <b>${workedAvg}</b>
+  </div>
+  ${projectedWorkHtml}
   `;
 
   return createElement('div', {
     insertTo: ui.top,
     innerHTML: html,
   });
+}
+
+function getAverageTimeString(minutes: Minutes): string {
+  // tslint:disable: no-magic-numbers
+  const h = String(Math.floor(minutes / 60)).padStart(2, '0');
+  const m = String(Math.floor(minutes) % 60).padStart(2, '0');
+  return h === 'NaN' || m === 'NaN' ? 'N/A' : `${h}:${m}`;
 }
 
 /**
