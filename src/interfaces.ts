@@ -10,6 +10,7 @@ export type DayType = 'regular' | 'asakai' | 'holiday';
 export type Page = 'list' | 'input' | 'confirm' | 'logout' | 'error' | 'batch' | 'wagedetail';
 export type Action = 'waiting' | 'autofill' | 'autoinput';
 export type InputOffsetDay = -1 | 0 | 1;
+export type Minutes = number;
 
 export interface InputHours {
   entryH: number;
@@ -30,7 +31,7 @@ export interface DateInfo {
 export interface DayInfo {
   inputButton: HTMLInputElement;
   checkbox: HTMLInputElement;
-  worked: number; // in minutes
+  worked: Minutes;
   date: DateInfo;
   gateRecording?: InputHours;
   state: DayState;
