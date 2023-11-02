@@ -3,7 +3,7 @@ import { applyStyle, createElement } from '../utils/dom';
 import { getStats } from '../rhs/get-stats';
 import { autoFillList, resetStateAction } from '../actions/auto-fill';
 import { autoInputDrafts } from '../actions/auto-input-drafts';
-import { State } from '../interfaces';
+import { Minutes, State } from '../interfaces';
 import { getDaysByState, isAutoFilling, getDraftableDays } from '../utils/state-queries';
 import { sendMessage } from '../utils/send-message';
 import { Settings } from '../utils/settings';

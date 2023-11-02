@@ -1,3 +1,4 @@
+import { Minutes } from '../interfaces';
 import { log } from './log';
 import { sendMessage } from './send-message';
 
@@ -7,8 +8,8 @@ export type UseDefaultTime = 'no' | 'perDayType' | 'perWeekDay';
 export interface WeekDaySettings {
   defaultStart: string | undefined; // default time to input when no gate time is recorded
   defaultEnd: string | undefined; // default time to input when no gate time is recorded
-  offsetStart: number; // minutes after gate recording-in per week-day
-  offsetEnd: number; // minutes before gate recording-out per week-day
+  offsetStart: Minutes; // minutes after gate recording-in per week-day
+  offsetEnd: Minutes; // minutes before gate recording-out per week-day
   clipStart: string | undefined; // earliest time to input as start time
   clipEnd: string | undefined; // latest time to input as end time
 }
