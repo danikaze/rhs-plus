@@ -46,7 +46,10 @@ export interface State {
 }
 
 export interface MonthlyStats {
-  average: number; // in minutes
+  // average worked time until current day
+  workedAverage: Minutes;
+  // average worked time including the rest of the month
+  projectedAverage: Minutes;
   summary: {
     draft: number;
     inputted: number;
